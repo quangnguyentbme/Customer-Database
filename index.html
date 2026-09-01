@@ -117,8 +117,8 @@ table.dt tr{cursor:pointer}
 
 <script>
 // ═══ SUPABASE CONFIG ═══
-const SUPABASE_URL = 'https://mvxemtvhioomjxaygksl.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12eGVtdHZoaW9vbWp4YXlna3NsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMTYxNjEsImV4cCI6MjEwMzc5MjE2MX0.DtiiRU0tBDlZasDW4aIxpnO359UFruVK86SlXfoWHeU';
+const SUPABASE_URL = '';
+const SUPABASE_KEY = '';
 const _sbH={'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Prefer':'return=minimal'};
 const _cloudOK=SUPABASE_URL.length>5&&SUPABASE_KEY.length>5;
 
@@ -132,8 +132,8 @@ const ENTITIES={
       {k:'tax_code',l:'Tax Code',type:'text'},
       {k:'tax_address',l:'Tax Address',type:'text'},
       {k:'authorized_person',l:'Authorized Person',type:'text'},
-      {k:'company_type',l:'Company Type',type:'select',opts:['Travel Agent','Tour Operator','OTA','TMC','Airline','Hotel','DMC','MICE','Consolidator','Corporate','GSA','Other'],listCol:true},
-      {k:'business_model',l:'Business Model',type:'select',opts:['B2B','B2C','B2B2C','Marketplace','Distributor','Manufacturer','Retailer','Service Provider','Other'],listCol:true},
+      {k:'company_type',l:'Company Type',type:'select',opts:['TRAVEL AGENT','TOUR OPERATOR','OTA','TMC','AIRLINE','HOTEL','DMC','MICE','CONSOLIDATOR','CORPORATE','GSA','OTHER'],listCol:true},
+      {k:'business_model',l:'Business Model',type:'select',opts:['B2B','B2C','B2B2C','MARKETPLACE','Distributor','Manufacturer','Retailer','Service Provider','Other'],listCol:true},
       {k:'industry',l:'Industry',type:'select',opts:['Airlines','Hospitality','Travel','MICE','Corporate','Cruise','Other']},
       {k:'country',l:'Country',type:'select',opts:[
   'Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda','Argentina','Armenia','Australia','Austria','Azerbaijan',
