@@ -66,6 +66,11 @@ table.dt tr{cursor:pointer}
 .form-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--t);color:#fff;font-family:inherit;font-size:12px;font-weight:500;padding:10px 20px;border-radius:99px;box-shadow:0 4px 20px rgba(0,0,0,.2);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:9999;pointer-events:none}
 .toast.show{transform:translateX(-50%) translateY(0)}
+.col-toggle{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.col-chip{font-size:10px;padding:4px 10px;border-radius:99px;border:1px solid var(--bl);background:var(--w);cursor:pointer;user-select:none}
+.col-chip.on{background:var(--bbg);border-color:var(--blu);color:var(--blu)}
+.filter-input{width:100%;font-family:inherit;font-size:10px;padding:3px 6px;border:1px solid var(--bl);border-radius:4px;outline:none;margin-top:4px}
+.filter-input:focus{border-color:var(--blu)}
 @media(max-width:900px){.sts{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.sts{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.app{padding:16px 10px 60px}}
 </style>
@@ -88,9 +93,11 @@ table.dt tr{cursor:pointer}
 <div id="listView">
   <div class="search-bar">
     <input class="search-input" id="searchBox" type="text" placeholder="Tìm kiếm..." oninput="renderList()">
+    <button class="btn" style="background:var(--bg);color:var(--t2)" onclick="toggleColPanel()">⚙ Cột</button>
     <button class="btn btn-b" onclick="openForm()">+ Thêm mới</button>
   </div>
-  <div class="cd"><div class="tbl-wrap" id="tableWrap"></div></div>
+  <div id="colPanel" style="display:none" class="cd"><div class="cd-t">Chọn cột hiển thị</div><div class="col-toggle" id="colToggle"></div></div>
+<div class="cd"><div class="tbl-wrap" id="tableWrap"></div></div>
 </div>
 
 </div>
@@ -372,23 +379,56 @@ function renderTabs(){
     b.onclick=()=>{curEntity=eid;renderTabs();renderList()};
     c.appendChild(b)})}
 
+let hiddenCols={};
+let colFilters={};
+
+function toggleColPanel(){
+  const p=$('colPanel');
+  p.style.display=p.style.display==='none'?'':'none';
+  if(p.style.display!=='none')renderColToggle()}
+
+function renderColToggle(){
+  const e=ENTITIES[curEntity];
+  const cols=e.fields.filter(f=>f.listCol);
+  const hid=hiddenCols[curEntity]||[];
+  $('colToggle').innerHTML=cols.map(f=>
+    `<span class="col-chip ${hid.includes(f.k)?'':'on'}" onclick="toggleCol('${f.k}')">${f.l}</span>`
+  ).join('')}
+
+function toggleCol(k){
+  if(!hiddenCols[curEntity])hiddenCols[curEntity]=[];
+  const arr=hiddenCols[curEntity];
+  const idx=arr.indexOf(k);
+  if(idx>=0)arr.splice(idx,1);else arr.push(k);
+  renderColToggle();renderList()}
+
 function renderList(){
   const eid=curEntity;const e=ENTITIES[eid];
   const q=($('searchBox').value||'').toLowerCase();
   let items=(data[eid]||[]).slice();
 
-  // Search
   if(q){items=items.filter(item=>e.searchKeys.some(k=>(item[k]||'').toLowerCase().includes(q)))}
 
-  // Sort by most recent first
+  const hid=hiddenCols[eid]||[];
+  const cols=e.fields.filter(f=>f.listCol&&!hid.includes(f.k));
+
+  // Apply column filters
+  const cf=colFilters[eid]||{};
+  Object.entries(cf).forEach(([k,v])=>{
+    if(v)items=items.filter(item=>{
+      let val=item[k]||'';
+      if(k==='full_name')val=(item.first_name||'')+' '+(item.last_name||'');
+      return String(val).toLowerCase().includes(v.toLowerCase())})});
+
   items.reverse();
 
-  const cols=e.fields.filter(f=>f.listCol);
   let h='<table class="dt"><thead><tr><th>#</th>';
-  cols.forEach(f=>{h+=`<th>${f.l}</th>`});
+  cols.forEach(f=>{
+    const fv=(cf[f.k]||'');
+    h+=`<th>${f.l}<br><input class="filter-input" data-fk="${f.k}" value="${fv}" placeholder="Lọc..." oninput="setFilter(this)"></th>`});
   h+='</tr></thead><tbody>';
 
-  if(items.length===0){h+=`<tr><td colspan="${cols.length+1}" style="text-align:center;padding:40px;color:var(--t3)">Chưa có dữ liệu. Bấm "+ Thêm mới" để bắt đầu.</td></tr>`}
+  if(items.length===0){h+=`<tr><td colspan="${cols.length+1}" style="text-align:center;padding:40px;color:var(--t3)">Không có dữ liệu</td></tr>`}
   else{items.forEach((item,idx)=>{
     const realIdx=(data[eid]||[]).indexOf(item);
     h+=`<tr onclick="openForm(${realIdx})"><td style="color:var(--t3)">${items.length-idx}</td>`;
@@ -400,8 +440,16 @@ function renderList(){
       h+=`<td>${v}</td>`});
     h+='</tr>'})}
 
-  h+='</tbody></table>';
+  h+=`</tbody></table><div style="font-size:10px;color:var(--t3);margin-top:8px">${items.length} kết quả</div>`;
   $('tableWrap').innerHTML=h}
+
+function setFilter(el){
+  const eid=curEntity;
+  if(!colFilters[eid])colFilters[eid]={};
+  colFilters[eid][el.dataset.fk]=el.value;
+  renderList();
+  // Keep focus on filter input after re-render
+  setTimeout(()=>{const inp=document.querySelector(`[data-fk="${el.dataset.fk}"]`);if(inp){inp.focus();inp.selectionStart=inp.value.length}},0)}
 
 // ═══ FORM ═══
 function openForm(idx){
