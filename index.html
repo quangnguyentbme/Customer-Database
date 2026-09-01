@@ -419,6 +419,13 @@ function openForm(idx){
     const val=item[f.k]||'';
     const cls=f.type==='textarea'?'full':'';
     h+=`<div class="form-group ${cls}"><label>${f.l}${f.required?' *':''}</label>`;
+    if(f.k==='company_name'&&f.type==='text'){
+      const companies=(data.companies||[]).map(c=>c.company_name).filter(Boolean).sort();
+      h+=`<select data-key="${f.k}"><option value="">-- Chọn Company --</option>`;
+      companies.forEach(c=>{h+=`<option value="${c}"${val===c?' selected':''}>${c}</option>`});
+      h+=`<option value="__other">+ Nhập thủ công</option></select>`;
+      h+=`<input type="text" data-key="${f.k}_manual" placeholder="Nhập tên mới..." style="display:none;margin-top:4px">`;
+      h+=`</div>`;return}
     if(f.type==='select'){
       h+=`<select data-key="${f.k}"><option value="">-- Chọn --</option>`;
       (f.opts||[]).forEach(o=>{h+=`<option value="${o}"${val===o?' selected':''}>${o}</option>`});
@@ -428,6 +435,11 @@ function openForm(idx){
     h+=`</div>`});
 
   $('formFields').innerHTML=h;
+    // Show manual input when "Nhập thủ công" selected
+  $('formFields').querySelectorAll('select[data-key="company_name"]').forEach(sel=>{
+    sel.addEventListener('change',()=>{
+      const manual=sel.parentElement.querySelector('[data-key="company_name_manual"]');
+      if(manual)manual.style.display=sel.value==='__other'?'':'none'})});
   $('modalBg').classList.add('show')}
 
 function closeForm(){$('modalBg').classList.remove('show');editIdx=-1}
@@ -440,7 +452,12 @@ function saveForm(){
 
   // Read form values
   $('formFields').querySelectorAll('[data-key]').forEach(el=>{
-    record[el.dataset.key]=el.value.trim()});
+    if(el.dataset.key.endsWith('_manual'))return;
+    let v=el.value.trim();
+    if(el.dataset.key==='company_name'&&v==='__other'){
+      const manual=$('formFields').querySelector('[data-key="company_name_manual"]');
+      v=manual?manual.value.trim():''}
+    record[el.dataset.key]=v});
 
   // Auto-generate ID for new records
   if(editIdx<0){
