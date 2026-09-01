@@ -24,7 +24,7 @@ body{font-family:'Calibri',Arial,sans-serif;background:var(--bg);color:var(--t);
 .tab{flex-shrink:0;font-family:inherit;font-size:15px;font-weight:500;padding:7px 14px;border-radius:99px;border:1px solid var(--bl);background:var(--w);color:var(--t2);cursor:pointer;transition:all .2s;white-space:nowrap}
 .tab:hover{border-color:var(--blu);color:var(--blu)}
 .tab.a{background:var(--blu);border-color:var(--blu);color:#fff}
-.tab .cnt{font-size:9px;background:rgba(255,255,255,.3);padding:1px 5px;border-radius:99px;margin-left:4px}
+.tab .cnt{font-size:px;background:rgba(255,255,255,.3);padding:1px 5px;border-radius:99px;margin-left:4px}
 .tab.a .cnt{background:rgba(255,255,255,.3)}
 /* Stats */
 .sts{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
@@ -33,7 +33,7 @@ body{font-family:'Calibri',Arial,sans-serif;background:var(--bg);color:var(--t);
 .st-lb{font-size:12px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px}
 /* Card */
 .cd{background:var(--w);border-radius:var(--r);padding:20px;box-shadow:var(--sh);margin-bottom:14px}
-.cd-t{font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px}
+.cd-t{font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px}
 /* Search */
 .search-bar{display:flex;gap:8px;margin-bottom:14px}
 .search-input{flex:1;font-family:inherit;font-size:13px;padding:9px 14px;border:1px solid var(--bl);border-radius:var(--rs);outline:none;transition:border-color .2s}
@@ -127,24 +127,96 @@ const ENTITIES={
   companies:{label:'Companies',icon:'🏢',color:'var(--blu)',
     fields:[
       {k:'company_id',l:'Company ID',type:'text',auto:true},
-      {k:'company_name',l:'Company Name',type:'text',required:true,listCol:true},
+      {k:'company_full_name',l:'Company Full Name',type:'text',required:true,listCol:true},
+      {k:'brand_name',l:'Brand Name',type:'text'},
+      {k:'tax_code',l:'Tax Code',type:'text'},
+      {k:'tax_address',l:'Tax Address',type:'text'},
+      {k:'authorized_person',l:'Authorized Person',type:'text'},
       {k:'company_type',l:'Company Type',type:'select',opts:['Travel Agent','Tour Operator','OTA','TMC','Airline','Hotel','DMC','MICE','Consolidator','Corporate','GSA','Other'],listCol:true},
+      {k:'business_model',l:'Business Model',type:'select',opts:['B2B','B2C','B2B2C','Marketplace','Distributor','Manufacturer','Retailer','Service Provider','Other'],listCol:true},
       {k:'industry',l:'Industry',type:'select',opts:['Airlines','Hospitality','Travel','MICE','Corporate','Cruise','Other']},
-      {k:'country',l:'Country',type:'text',listCol:true},
-      {k:'market',l:'Market',type:'text',listCol:true},
-      {k:'region',l:'Region',type:'select',opts:['Europe','CIS','Middle East','North America','Asia Pacific','Africa','Latin America']},
+      {k:'country',l:'Country',type:'select',opts:[
+  'Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda','Argentina','Armenia','Australia','Austria','Azerbaijan',
+  'Bahamas','Bahrain','Bangladesh','Barbados','Belarus','Belgium','Belize','Benin','Bhutan','Bolivia','Bosnia and Herzegovina','Botswana','Brazil','Brunei Darussalam','Bulgaria','Burkina Faso','Burundi',
+  'Cabo Verde','Cambodia','Cameroon','Canada','Central African Republic','Chad','Chile','China','Colombia','Comoros','Congo','Costa Rica',"Côte d'Ivoire",'Croatia','Cuba','Cyprus','Czechia',
+  "Democratic People's Republic of Korea",'Democratic Republic of the Congo','Denmark','Djibouti','Dominica','Dominican Republic',
+  'Ecuador','Egypt','El Salvador','Equatorial Guinea','Eritrea','Estonia','Eswatini','Ethiopia',
+  'Fiji','Finland','France',
+  'Gabon','Gambia','Georgia','Germany','Ghana','Greece','Grenada','Guatemala','Guinea','Guinea-Bissau','Guyana',
+  'Haiti','Honduras','Hungary',
+  'Iceland','India','Indonesia','Iran','Iraq','Ireland','Israel','Italy',
+  'Jamaica','Japan','Jordan',
+  'Kazakhstan','Kenya','Kiribati','Kuwait','Kyrgyzstan',
+  'Laos','Latvia','Lebanon','Lesotho','Liberia','Libya','Liechtenstein','Lithuania','Luxembourg',
+  'Madagascar','Malawi','Malaysia','Maldives','Mali','Malta','Marshall Islands','Mauritania','Mauritius','Mexico','Micronesia','Moldova','Monaco','Mongolia','Montenegro','Morocco','Mozambique','Myanmar',
+  'Namibia','Nauru','Nepal','Netherlands','New Zealand','Nicaragua','Niger','Nigeria','North Korea','North Macedonia','Norway',
+  'Oman',
+  'Pakistan','Palau','Palestine','Panama','Papua New Guinea','Paraguay','Peru','Philippines','Poland','Portugal',
+  'Qatar',
+  'Romania','Russia','Rwanda',
+  'Saint Kitts and Nevis','Saint Lucia','Saint Vincent and the Grenadines','Samoa','San Marino','Sao Tome and Principe','Saudi Arabia','Senegal','Serbia','Seychelles','Sierra Leone','Singapore','Slovakia','Slovenia','Solomon Islands','Somalia','South Africa','South Korea','South Sudan','Spain','Sri Lanka','Sudan','Suriname','Sweden','Switzerland','Syria',
+  'Taiwan','Tajikistan','Tanzania','Thailand','Timor-Leste','Togo','Tonga','Trinidad and Tobago','Tunisia','Türkiye','Turkmenistan','Tuvalu',
+  'Uganda','Ukraine','United Arab Emirates','United Kingdom','United States','Uruguay','Uzbekistan',
+  'Vanuatu','Vatican City','Venezuela','Vietnam',
+  'Yemen',
+  'Zambia','Zimbabwe'
+],listCol:true},
+      {k:'market',l:'Market',type:'select',opts:[
+  'Vietnam',
+  'Southeast Asia',
+  'Northeast Asia',
+  'South Asia',
+  'Central Asia',
+  'Russia & CIS',
+  'Caucasus',
+  'Middle East',
+  'Western Europe',
+  'Northern Europe',
+  'Southern Europe',
+  'Central Europe',
+  'Eastern Europe',
+  'Europe',
+  'North America',
+  'Central America',
+  'Caribbean',
+  'South America',
+  'Latin America',
+  'Africa',
+  'Oceania',
+  'Global',
+  'Other'
+],listCol:true},
+      {k:'region',l:'Region',type:'select',opts:[
+  'Western Europe',
+  'Northern Europe',
+  'Southern Europe',
+  'Eastern Europe',
+  'Central Europe',
+  'CIS',
+  'Caucasus',
+  'Central Asia',
+  'Middle East',
+  'North Africa',
+  'Sub-Saharan Africa',
+  'North America',
+  'Central America',
+  'Caribbean',
+  'South America',
+  'Northeast Asia',
+  'Southeast Asia',
+  'South Asia',
+  'Oceania'
+],listCol:true},
       {k:'city',l:'City',type:'text'},
       {k:'office_branch',l:'Office / Branch',type:'text'},
       {k:'website',l:'Website',type:'text'},
       {k:'parent_company',l:'Parent Company',type:'text'},
-      {k:'quang_dep_trai',l:'quang_dep_trai',type:'text'},
       {k:'company_size',l:'Company Size',type:'select',opts:['1-10','11-50','51-200','201-500','500+']},
       {k:'account_status',l:'Account Status',type:'select',opts:['Prospect','Active','Inactive','Churned','Blocked'],listCol:true,badge:true},
       {k:'account_tier',l:'Account Tier',type:'select',opts:['Strategic','Key','Standard','New'],listCol:true,badge:true},
       {k:'account_owner',l:'Account Owner',type:'text'},
       {k:'lead_source',l:'Lead Source',type:'select',opts:['Referral','Event','Cold Call','Website','LinkedIn','Trade Show','Partner','Other']},
-      {k:'created_date',l:'Created Date',type:'date'},
-      {k:'last_updated',l:'Last Updated',type:'date'}
+      {k:'founding_date',l:'Founding Date',type:'date'},
     ],searchKeys:['company_name','country','market','company_type']},
 
   contacts:{label:'Contacts',icon:'👤',color:'var(--grn)',
@@ -153,17 +225,18 @@ const ENTITIES={
       {k:'company_name',l:'Company',type:'text',required:true,listCol:true},
       {k:'first_name',l:'First Name',type:'text',required:true},
       {k:'last_name',l:'Last Name',type:'text',required:true},
+      {k:'sex',l:'Sex',type:'select',opts:['Male','Female','Other']},
       {k:'full_name',l:'Full Name',type:'text',listCol:true,computed:true},
       {k:'job_title',l:'Job Title',type:'text',listCol:true},
-      {k:'department',l:'Department',type:'select',opts:['Sales','Marketing','Operations','Finance','Management','Product','IT','Procurement','Other']},
+      {k:'department',l:'Department',type:'text',listCol:true},
       {k:'seniority',l:'Seniority',type:'select',opts:['C-Level','VP','Director','Manager','Executive','Staff']},
       {k:'email',l:'Email',type:'email',listCol:true},
       {k:'phone',l:'Phone',type:'text'},
-      {k:'whatsapp',l:'WhatsApp',type:'text'},
+      {k:'date_of_birth',l:'Date of Birth',type:'date'},
       {k:'linkedin',l:'LinkedIn',type:'text'},
       {k:'country',l:'Country',type:'text'},
       {k:'city',l:'City',type:'text'},
-      {k:'preferred_language',l:'Preferred Language',type:'select',opts:['English','Vietnamese','Russian','Korean','Chinese','Japanese','Arabic','French','German','Other']},
+      {k:'preferred_language',l:'Preferred Language',type:'select',opts:['English','Vietnamese','Chinese','Mandarin','Cantonese','Japanese','Korean','Thai','Indonesian','Malay','Filipino','Khmer','Lao','Burmese','Hindi','Bengali','Urdu','Tamil','Telugu','Malayalam','Kannada','Punjabi','Gujarati','Nepali','Sinhala','Arabic','Persian','Farsi','Dari','Hebrew','Turkish','Russian','Ukrainian','Polish','Czech','Slovak','Hungarian','Romanian','Bulgarian','Serbian','Croatian','Greek','Italian','Spanish','Portuguese','French','German','Dutch','Danish','Swedish','Norwegian','Finnish','Icelandic','Estonian','Latvian','Lithuanian','Georgian','Armenian','Azerbaijani','Kazakh','Uzbek','Mongolian','Swahili','Amharic','Afrikaans','Somali','Zulu','Other']},
       {k:'contact_type',l:'Contact Type',type:'select',opts:['Primary','Secondary','Technical','Commercial','Management']},
       {k:'decision_power',l:'Decision Power',type:'select',opts:['Decision Maker','Influencer','Gatekeeper','User','Champion']},
       {k:'relationship_level',l:'Relationship Level',type:'select',opts:['Strong','Good','Developing','New','Cold'],listCol:true,badge:true},
