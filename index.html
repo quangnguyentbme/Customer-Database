@@ -81,8 +81,7 @@ table.dt tr{cursor:pointer}
 <div class="hdr">
   <div><h1>Sales CRM</h1><p>Airlines & Hospitality · <span id="syncBadge" style="font-size:11px;font-weight:500;color:var(--t3)"></span></p></div>
   <div class="hdr-act">
-    <button class="btn btn-b" onclick="syncBoth()">↑ Đẩy lên</button>
-    <button class="btn btn-g" onclick="syncPull()">↓ Tải về</button>
+    <button class="btn btn-b" onclick="syncPush()">☁ Đồng bộ</button>
     <button class="btn btn-o" onclick="exportAll()">↓ CSV</button>
   </div>
 </div>
@@ -548,17 +547,20 @@ function exportAll(){
   a.download=`CRM_${eid}_${new Date().toISOString().slice(0,10)}.csv`;a.click();toast('✓ Đã xuất CSV')}
 
 // ═══ INIT ═══
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&_cloudOK){
+  ENTITY_KEYS.filter(k=>(data[k]||[]).length>0).forEach(eid=>{
+    fetch(SUPABASE_URL+'/rest/v1/crm_data?id=eq.'+eid,{method:'PATCH',keepalive:true,
+      headers:_sbH,body:JSON.stringify({data:data[eid],updated_at:new Date().toISOString()})})})}});
+window.addEventListener('beforeunload',()=>{if(_cloudOK){
+  ENTITY_KEYS.filter(k=>(data[k]||[]).length>0).forEach(eid=>{
+    fetch(SUPABASE_URL+'/rest/v1/crm_data?id=eq.'+eid,{method:'PATCH',keepalive:true,
+      headers:_sbH,body:JSON.stringify({data:data[eid],updated_at:new Date().toISOString()})})})}});
+
 document.addEventListener('DOMContentLoaded',async()=>{
   data=loadLocal();
-  // Init empty arrays
   ENTITY_KEYS.forEach(k=>{if(!data[k])data[k]=[]});
+  if(_cloudOK)await syncPull();
   renderAll();
-  // Auto pull on first load if cloud configured and local is empty
-  const totalLocal=ENTITY_KEYS.reduce((s,k)=>s+(data[k]||[]).length,0);
-    if(_cloudOK&&totalLocal===0)await syncPull();
-  else if(_cloudOK){$('syncBadge').textContent='☁ Sẵn sàng';$('syncBadge').style.color='var(--t3)'}
-  else{$('syncBadge').textContent='⚪ Offline'}
+  if(!_cloudOK){$('syncBadge').textContent='⚪ Offline'}
 });
 </script>
-</body>
-</html>
