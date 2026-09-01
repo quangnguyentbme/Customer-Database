@@ -341,7 +341,7 @@ async function syncPull(){
 async function syncBoth(){
   if(!_cloudOK){toast('⚠ Chưa cấu hình');return}
   toast('🔄 Đang đồng bộ...');
-  await syncPull();await syncPush();
+  await syncPush();await syncPull();
   toast('✓ Đã đồng bộ 2 chiều')}
 async function syncPush(){
   if(!_cloudOK){toast('⚠ Chưa cấu hình');return}
