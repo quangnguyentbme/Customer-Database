@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CRM">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales CRM — Airlines & Hospitality</title>
+<style>
+:root{--bg:#f5f5f7;--w:#fff;--t:#1d1d1f;--t2:#6e6e73;--t3:#aeaeb2;--bd:#d2d2d7;--bl:#e8e8ed;--grn:#34c759;--gbg:#f0faf2;--blu:#007aff;--bbg:#f0f5ff;--org:#ff9500;--obg:#fff8f0;--pnk:#ff2d55;--pbg:#fff0f3;--pur:#af52de;--tl:#5ac8fa;--r:16px;--rs:10px;--sh:0 1px 3px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Calibri',Arial,sans-serif;background:var(--bg);color:var(--t);-webkit-font-smoothing:antialiased;font-size:13px}
+.app{max-width:1500px;margin:0 auto;padding:24px 20px 80px}
+.hdr{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.hdr h1{font-size:32px;font-weight:600;letter-spacing:-1px}
+.hdr p{color:var(--t2);font-size:13px;margin-top:2px}
+.hdr-act{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.btn{font-family:inherit;font-size:11px;font-weight:600;padding:7px 16px;border-radius:99px;border:none;cursor:pointer;transition:all .2s}
+.btn-b{background:var(--blu);color:#fff}.btn-b:hover{background:#006ae0}
+.btn-g{background:var(--gbg);color:var(--grn)}.btn-o{background:var(--obg);color:var(--org)}
+.btn-p{background:var(--pbg);color:var(--pnk)}
+/* Tabs */
+.tabs{display:flex;gap:3px;margin-bottom:16px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.tab{flex-shrink:0;font-family:inherit;font-size:11px;font-weight:500;padding:7px 14px;border-radius:99px;border:1px solid var(--bl);background:var(--w);color:var(--t2);cursor:pointer;transition:all .2s;white-space:nowrap}
+.tab:hover{border-color:var(--blu);color:var(--blu)}
+.tab.a{background:var(--blu);border-color:var(--blu);color:#fff}
+.tab .cnt{font-size:9px;background:rgba(255,255,255,.3);padding:1px 5px;border-radius:99px;margin-left:4px}
+.tab.a .cnt{background:rgba(255,255,255,.3)}
+/* Stats */
+.sts{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
+.st{background:var(--w);border-radius:var(--r);padding:14px;box-shadow:var(--sh)}
+.st-v{font-size:24px;font-weight:600}
+.st-lb{font-size:9px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px}
+/* Card */
+.cd{background:var(--w);border-radius:var(--r);padding:20px;box-shadow:var(--sh);margin-bottom:14px}
+.cd-t{font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px}
+/* Search */
+.search-bar{display:flex;gap:8px;margin-bottom:14px}
+.search-input{flex:1;font-family:inherit;font-size:13px;padding:9px 14px;border:1px solid var(--bl);border-radius:var(--rs);outline:none;transition:border-color .2s}
+.search-input:focus{border-color:var(--blu)}
+/* Table */
+.tbl-wrap{overflow-x:auto}
+table.dt{width:100%;border-collapse:collapse;font-size:11px;white-space:nowrap}
+table.dt th,table.dt td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--bl)}
+table.dt th{background:var(--bg);font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;font-size:9px;position:sticky;top:0;z-index:1}
+table.dt tr:hover{background:var(--bbg)}
+table.dt tr{cursor:pointer}
+.badge{display:inline-block;font-size:9px;font-weight:600;padding:2px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:.3px}
+.badge-g{background:var(--gbg);color:var(--grn)}
+.badge-b{background:var(--bbg);color:var(--blu)}
+.badge-o{background:var(--obg);color:var(--org)}
+.badge-p{background:var(--pbg);color:var(--pnk)}
+.badge-gr{background:var(--bg);color:var(--t3)}
+/* Modal */
+.modal-bg{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);z-index:999;display:none;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
+.modal-bg.show{display:flex}
+.modal{background:var(--w);border-radius:20px;width:100%;max-width:800px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.2);max-height:90vh;overflow-y:auto}
+.modal h2{font-size:20px;font-weight:600;margin-bottom:16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.form-group{display:flex;flex-direction:column;gap:3px}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.5px}
+.form-group input,.form-group select,.form-group textarea{font-family:inherit;font-size:12px;padding:8px 10px;border:1px solid var(--bl);border-radius:8px;outline:none;transition:border-color .2s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--blu)}
+.form-group textarea{resize:vertical;min-height:60px}
+.form-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--t);color:#fff;font-family:inherit;font-size:12px;font-weight:500;padding:10px 20px;border-radius:99px;box-shadow:0 4px 20px rgba(0,0,0,.2);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:9999;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+@media(max-width:900px){.sts{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.sts{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.app{padding:16px 10px 60px}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="hdr">
+  <div><h1>Sales CRM</h1><p>Airlines & Hospitality · <span id="syncBadge" style="font-size:11px;font-weight:500;color:var(--t3)"></span></p></div>
+  <div class="hdr-act">
+    <button class="btn btn-g" onclick="syncPull()">↓ Tải về</button>
+    <button class="btn btn-b" onclick="syncPush()">↑ Đồng bộ</button>
+    <button class="btn btn-o" onclick="exportAll()">↓ CSV</button>
+  </div>
+</div>
+
+<div class="sts" id="statsRow"></div>
+<div class="tabs" id="tabs"></div>
+
+<div id="listView">
+  <div class="search-bar">
+    <input class="search-input" id="searchBox" type="text" placeholder="Tìm kiếm..." oninput="renderList()">
+    <button class="btn btn-b" onclick="openForm()">+ Thêm mới</button>
+  </div>
+  <div class="cd"><div class="tbl-wrap" id="tableWrap"></div></div>
+</div>
+
+</div>
+
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeForm()">
+  <div class="modal" id="modal">
+    <h2 id="formTitle">Thêm mới</h2>
+    <div class="form-grid" id="formFields"></div>
+    <div class="form-actions">
+      <button class="btn btn-p" id="btnDel" style="margin-right:auto;display:none" onclick="deleteRecord()">Xoá</button>
+      <button class="btn" style="background:var(--bg);color:var(--t2)" onclick="closeForm()">Huỷ</button>
+      <button class="btn btn-b" onclick="saveForm()">Lưu</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══ SUPABASE CONFIG ═══
+const SUPABASE_URL = 'https://mvxemtvhioomjxaygksl.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12eGVtdHZoaW9vbWp4YXlna3NsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMTYxNjEsImV4cCI6MjEwMzc5MjE2MX0.DtiiRU0tBDlZasDW4aIxpnO359UFruVK86SlXfoWHeU';
+const _sbH={'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Prefer':'return=minimal'};
+const _cloudOK=SUPABASE_URL.length>5&&SUPABASE_KEY.length>5;
+
+// ═══ ENTITY SCHEMA ═══
+const ENTITIES={
+  companies:{label:'Companies',icon:'🏢',color:'var(--blu)',
+    fields:[
+      {k:'company_id',l:'Company ID',type:'text',auto:true},
+      {k:'company_name',l:'Company Name',type:'text',required:true,listCol:true},
+      {k:'company_type',l:'Company Type',type:'select',opts:['Travel Agent','Tour Operator','OTA','TMC','Airline','Hotel','DMC','MICE','Consolidator','Corporate','GSA','Other'],listCol:true},
+      {k:'industry',l:'Industry',type:'select',opts:['Airlines','Hospitality','Travel','MICE','Corporate','Cruise','Other']},
+      {k:'country',l:'Country',type:'text',listCol:true},
+      {k:'market',l:'Market',type:'text',listCol:true},
+      {k:'region',l:'Region',type:'select',opts:['Europe','CIS','Middle East','North America','Asia Pacific','Africa','Latin America']},
+      {k:'city',l:'City',type:'text'},
+      {k:'office_branch',l:'Office / Branch',type:'text'},
+      {k:'website',l:'Website',type:'text'},
+      {k:'parent_company',l:'Parent Company',type:'text'},
+      {k:'company_size',l:'Company Size',type:'select',opts:['1-10','11-50','51-200','201-500','500+']},
+      {k:'account_status',l:'Account Status',type:'select',opts:['Prospect','Active','Inactive','Churned','Blocked'],listCol:true,badge:true},
+      {k:'account_tier',l:'Account Tier',type:'select',opts:['Strategic','Key','Standard','New'],listCol:true,badge:true},
+      {k:'account_owner',l:'Account Owner',type:'text'},
+      {k:'lead_source',l:'Lead Source',type:'select',opts:['Referral','Event','Cold Call','Website','LinkedIn','Trade Show','Partner','Other']},
+      {k:'created_date',l:'Created Date',type:'date'},
+      {k:'last_updated',l:'Last Updated',type:'date'}
+    ],searchKeys:['company_name','country','market','company_type']},
+
+  contacts:{label:'Contacts',icon:'👤',color:'var(--grn)',
+    fields:[
+      {k:'contact_id',l:'Contact ID',type:'text',auto:true},
+      {k:'company_name',l:'Company',type:'text',required:true,listCol:true},
+      {k:'first_name',l:'First Name',type:'text',required:true},
+      {k:'last_name',l:'Last Name',type:'text',required:true},
+      {k:'full_name',l:'Full Name',type:'text',listCol:true,computed:true},
+      {k:'job_title',l:'Job Title',type:'text',listCol:true},
+      {k:'department',l:'Department',type:'select',opts:['Sales','Marketing','Operations','Finance','Management','Product','IT','Procurement','Other']},
+      {k:'seniority',l:'Seniority',type:'select',opts:['C-Level','VP','Director','Manager','Executive','Staff']},
+      {k:'email',l:'Email',type:'email',listCol:true},
+      {k:'phone',l:'Phone',type:'text'},
+      {k:'whatsapp',l:'WhatsApp',type:'text'},
+      {k:'linkedin',l:'LinkedIn',type:'text'},
+      {k:'country',l:'Country',type:'text'},
+      {k:'city',l:'City',type:'text'},
+      {k:'preferred_language',l:'Preferred Language',type:'select',opts:['English','Vietnamese','Russian','Korean','Chinese','Japanese','Arabic','French','German','Other']},
+      {k:'contact_type',l:'Contact Type',type:'select',opts:['Primary','Secondary','Technical','Commercial','Management']},
+      {k:'decision_power',l:'Decision Power',type:'select',opts:['Decision Maker','Influencer','Gatekeeper','User','Champion']},
+      {k:'relationship_level',l:'Relationship Level',type:'select',opts:['Strong','Good','Developing','New','Cold'],listCol:true,badge:true},
+      {k:'contact_status',l:'Status',type:'select',opts:['Active','Inactive','Left Company'],listCol:true,badge:true},
+      {k:'preferred_contact',l:'Preferred Contact Method',type:'select',opts:['Email','Phone','WhatsApp','LinkedIn','Meeting']},
+      {k:'notes',l:'Notes',type:'textarea'},
+      {k:'last_contact_date',l:'Last Contact Date',type:'date'}
+    ],searchKeys:['full_name','company_name','email','job_title']},
+
+  opportunities:{label:'Opportunities',icon:'💰',color:'var(--org)',
+    fields:[
+      {k:'opp_id',l:'Opportunity ID',type:'text',auto:true},
+      {k:'company_name',l:'Company',type:'text',required:true,listCol:true},
+      {k:'opp_name',l:'Opportunity Name',type:'text',required:true,listCol:true},
+      {k:'product',l:'Product',type:'select',opts:['Market Fare','SPA','Interline','Codeshare','Group','FIT','Charter','NDC','Corporate','Hotel Package','MICE','FAM Trip','Other']},
+      {k:'market',l:'Market',type:'text',listCol:true},
+      {k:'route',l:'Route',type:'text'},
+      {k:'stage',l:'Stage',type:'select',opts:['Lead','Qualified','Proposal','Negotiation','Closing','Won','Lost'],listCol:true,badge:true},
+      {k:'probability',l:'Probability %',type:'number'},
+      {k:'est_pax',l:'Estimated Pax',type:'number'},
+      {k:'est_revenue',l:'Estimated Revenue',type:'number'},
+      {k:'potential_value',l:'Potential Value',type:'number',listCol:true},
+      {k:'competitor',l:'Competitor',type:'text'},
+      {k:'decision_maker',l:'Decision Maker',type:'text'},
+      {k:'expected_close',l:'Expected Closing',type:'date',listCol:true},
+      {k:'sales_owner',l:'Sales Owner',type:'text'},
+      {k:'next_action',l:'Next Action',type:'text'},
+      {k:'next_action_date',l:'Next Action Date',type:'date'},
+      {k:'opp_status',l:'Status',type:'select',opts:['Open','Won','Lost','On Hold'],listCol:true,badge:true},
+      {k:'lost_reason',l:'Lost Reason',type:'select',opts:['Price','Product','Competitor','Timing','Budget','No Response','Other']},
+      {k:'notes',l:'Notes',type:'textarea'}
+    ],searchKeys:['opp_name','company_name','market','route']},
+
+  activities:{label:'Activities',icon:'📋',color:'var(--pur)',
+    fields:[
+      {k:'activity_id',l:'Activity ID',type:'text',auto:true},
+      {k:'company_name',l:'Company',type:'text',required:true,listCol:true},
+      {k:'contact_name',l:'Contact',type:'text',listCol:true},
+      {k:'date',l:'Date',type:'date',required:true,listCol:true},
+      {k:'activity_type',l:'Activity Type',type:'select',opts:['Call','Email','Meeting','Video Call','Trade Show','Site Visit','Presentation','Negotiation','Other'],listCol:true,badge:true},
+      {k:'channel',l:'Channel',type:'select',opts:['Phone','Email','WhatsApp','Zoom','Teams','In-person','LinkedIn']},
+      {k:'subject',l:'Subject',type:'text',listCol:true},
+      {k:'summary',l:'Summary',type:'textarea'},
+      {k:'discussion',l:'Discussion Details',type:'textarea'},
+      {k:'result',l:'Result',type:'select',opts:['Positive','Neutral','Negative','Follow-up Required','No Answer'],listCol:true,badge:true},
+      {k:'next_step',l:'Next Step',type:'text'},
+      {k:'next_action_date',l:'Next Action Date',type:'date'},
+      {k:'followup_status',l:'Follow-up Status',type:'select',opts:['Pending','Completed','Overdue','Cancelled']},
+      {k:'sales_owner',l:'Sales Owner',type:'text'},
+      {k:'attachments',l:'Attachments',type:'text'}
+    ],searchKeys:['company_name','contact_name','subject']},
+
+  visits:{label:'Sales Visits',icon:'✈️',color:'var(--tl)',
+    fields:[
+      {k:'visit_id',l:'Visit ID',type:'text',auto:true},
+      {k:'market',l:'Market',type:'text',listCol:true},
+      {k:'country',l:'Country',type:'text',listCol:true},
+      {k:'city',l:'City',type:'text'},
+      {k:'visit_date',l:'Visit Date',type:'date',required:true,listCol:true},
+      {k:'company_name',l:'Company',type:'text',required:true,listCol:true},
+      {k:'contact_name',l:'Contact',type:'text'},
+      {k:'visit_type',l:'Visit Type',type:'select',opts:['First Visit','Follow-up','Courtesy','Negotiation','Contract Signing','Training','FAM Trip'],listCol:true,badge:true},
+      {k:'purpose',l:'Purpose',type:'text'},
+      {k:'participants',l:'Participants',type:'text'},
+      {k:'discussion',l:'Discussion',type:'textarea'},
+      {k:'result',l:'Result',type:'textarea'},
+      {k:'potential_pax',l:'Potential Pax',type:'number'},
+      {k:'potential_revenue',l:'Potential Revenue',type:'number'},
+      {k:'followup',l:'Follow-up',type:'text'},
+      {k:'followup_date',l:'Follow-up Date',type:'date'},
+      {k:'visit_status',l:'Status',type:'select',opts:['Completed','Planned','Cancelled','Rescheduled'],listCol:true,badge:true}
+    ],searchKeys:['company_name','market','country','city']},
+
+  contracts:{label:'Contracts',icon:'📄',color:'#ac8e68',
+    fields:[
+      {k:'contract_id',l:'Contract ID',type:'text',auto:true},
+      {k:'company_name',l:'Company',type:'text',required:true,listCol:true},
+      {k:'contract_type',l:'Contract Type',type:'select',opts:['GSA','SPA','Interline','Codeshare','Charter','Group','Corporate','Commission','NDC','Other'],listCol:true,badge:true},
+      {k:'product',l:'Product',type:'text'},
+      {k:'market',l:'Market',type:'text',listCol:true},
+      {k:'route',l:'Route',type:'text',listCol:true},
+      {k:'effective_date',l:'Effective Date',type:'date'},
+      {k:'expiry_date',l:'Expiry Date',type:'date',listCol:true},
+      {k:'renewal_date',l:'Renewal Date',type:'date'},
+      {k:'commission',l:'Commission %',type:'text'},
+      {k:'net_fare',l:'Net Fare',type:'text'},
+      {k:'market_fare',l:'Market Fare',type:'text'},
+      {k:'published_fare',l:'Published Fare',type:'text'},
+      {k:'payment_terms',l:'Payment Terms',type:'select',opts:['Prepaid','Net 15','Net 30','Net 45','Net 60','BSP','ARC']},
+      {k:'currency',l:'Currency',type:'select',opts:['USD','EUR','VND','KZT','RUB','GBP','AED','KRW','JPY','CNY','Other']},
+      {k:'contract_status',l:'Status',type:'select',opts:['Draft','Active','Expired','Terminated','Under Review'],listCol:true,badge:true},
+      {k:'contract_owner',l:'Contract Owner',type:'text'},
+      {k:'contract_doc',l:'Contract Document',type:'text'}
+    ],searchKeys:['company_name','contract_type','market','route']},
+
+  tasks:{label:'Tasks',icon:'✅',color:'var(--grn)',
+    fields:[
+      {k:'task_id',l:'Task ID',type:'text',auto:true},
+      {k:'company_name',l:'Company',type:'text',listCol:true},
+      {k:'contact_name',l:'Contact',type:'text'},
+      {k:'opportunity',l:'Opportunity',type:'text'},
+      {k:'task_type',l:'Task Type',type:'select',opts:['Follow-up','Proposal','Contract','Meeting','Call','Email','Report','Other'],listCol:true,badge:true},
+      {k:'task_title',l:'Task Title',type:'text',required:true,listCol:true},
+      {k:'description',l:'Description',type:'textarea'},
+      {k:'priority',l:'Priority',type:'select',opts:['Urgent','High','Medium','Low'],listCol:true,badge:true},
+      {k:'due_date',l:'Due Date',type:'date',required:true,listCol:true},
+      {k:'assigned_to',l:'Assigned To',type:'text'},
+      {k:'status',l:'Status',type:'select',opts:['To Do','In Progress','Done','Cancelled'],listCol:true,badge:true},
+      {k:'completion_date',l:'Completion Date',type:'date'},
+      {k:'reminder',l:'Reminder',type:'date'},
+      {k:'notes',l:'Notes',type:'textarea'}
+    ],searchKeys:['task_title','company_name','assigned_to']},
+
+  competitors:{label:'Competitors',icon:'⚔️',color:'var(--pnk)',
+    fields:[
+      {k:'competitor_name',l:'Competitor Name',type:'text',required:true,listCol:true},
+      {k:'competitor_type',l:'Competitor Type',type:'select',opts:['Full Service Carrier','LCC','Charter','Regional','Other'],listCol:true,badge:true},
+      {k:'market',l:'Market',type:'text',listCol:true},
+      {k:'route',l:'Route',type:'text',listCol:true},
+      {k:'competitor_fare',l:'Competitor Fare',type:'text'},
+      {k:'competitor_commission',l:'Commission',type:'text'},
+      {k:'market_share',l:'Market Share %',type:'text'},
+      {k:'customer_share',l:'Customer Share %',type:'text'},
+      {k:'competitive_advantage',l:'Competitive Advantage',type:'textarea'},
+      {k:'competitive_weakness',l:'Competitive Weakness',type:'textarea'},
+      {k:'switching_potential',l:'Switching Potential',type:'select',opts:['High','Medium','Low'],listCol:true,badge:true},
+      {k:'notes',l:'Notes',type:'textarea'}
+    ],searchKeys:['competitor_name','market','route']},
+
+  products:{label:'Products',icon:'🎫',color:'var(--org)',
+    fields:[
+      {k:'product_name',l:'Product Name',type:'text',required:true,listCol:true},
+      {k:'product_category',l:'Category',type:'select',opts:['Scheduled','Charter','Interline','Codeshare','SPA','Group','FIT','NDC','Corporate','MICE','Hotel Package','FAM Trip','Other'],listCol:true,badge:true},
+      {k:'market',l:'Market',type:'text',listCol:true},
+      {k:'route',l:'Route',type:'text',listCol:true},
+      {k:'market_fare',l:'Market Fare',type:'text'},
+      {k:'published_fare',l:'Published Fare',type:'text'},
+      {k:'commission',l:'Commission',type:'text'},
+      {k:'ancillary',l:'Ancillary',type:'text'},
+      {k:'gds',l:'GDS',type:'select',opts:['Amadeus','Sabre','Travelport','All','None']},
+      {k:'ndc',l:'NDC',type:'select',opts:['Yes','No','Planned']},
+      {k:'bsp_arc',l:'BSP/ARC',type:'select',opts:['BSP','ARC','Both','None']},
+      {k:'notes',l:'Notes',type:'textarea'}
+    ],searchKeys:['product_name','market','route']}
+};
+
+const ENTITY_KEYS=Object.keys(ENTITIES);
+let curEntity='companies';
+let data={};
+let editIdx=-1;
+
+// ═══ HELPERS ═══
+const $=id=>document.getElementById(id);
+const toast=msg=>{const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)};
+const genId=()=>Date.now().toString(36)+Math.random().toString(36).substr(2,5);
+const badgeClass=v=>{const m={'Active':'g','Won':'g','Completed':'g','Done':'g','Strong':'g','Good':'g','Strategic':'b','Key':'b','Qualified':'b','Proposal':'b','Open':'b','In Progress':'b','Developing':'o','New':'o','Negotiation':'o','Pending':'o','Medium':'o','Planned':'o','High':'o','Prospect':'o','Lead':'o','Inactive':'gr','Lost':'p','Churned':'p','Blocked':'p','Cancelled':'p','Expired':'p','Urgent':'p','Cold':'p','Negative':'p','Overdue':'p','Terminated':'p'};return m[v]||'gr'};
+
+// ═══ LOCAL STORAGE ═══
+const LS_KEY='crm_data_local';
+function loadLocal(){try{const d=localStorage.getItem(LS_KEY);return d?JSON.parse(d):{}}catch{return{}}}
+function saveLocal(){try{localStorage.setItem(LS_KEY,JSON.stringify(data))}catch(e){console.error(e)}}
+
+// ═══ SUPABASE SYNC ═══
+async function syncPull(){
+  if(!_cloudOK){toast('⚠ Chưa cấu hình Supabase');return}
+  toast('↓ Đang tải...');
+  try{const res=await fetch(SUPABASE_URL+'/rest/v1/crm_data?select=id,data',{headers:_sbH});
+    if(!res.ok){toast('⚠ Lỗi '+res.status);return}
+    const rows=await res.json();
+    rows.forEach(r=>{if(r.data&&Array.isArray(r.data)&&r.data.length>0)data[r.id]=r.data});
+    saveLocal();renderAll();
+    $('syncBadge').textContent='🟢 Đã tải về';$('syncBadge').style.color='var(--grn)';
+    toast('✓ Đã tải '+rows.length+' bảng từ cloud')
+  }catch(e){toast('⚠ Offline');console.error(e)}}
+
+async function syncPush(){
+  if(!_cloudOK){toast('⚠ Chưa cấu hình');return}
+  toast('↑ Đang đồng bộ...');
+  try{let ok=0;
+    for(const eid of ENTITY_KEYS){
+      const arr=data[eid]||[];
+      const r=await fetch(SUPABASE_URL+'/rest/v1/crm_data?id=eq.'+eid,{method:'PATCH',
+        headers:_sbH,body:JSON.stringify({data:arr,updated_at:new Date().toISOString()})});
+      if(r.ok)ok++}
+    $('syncBadge').textContent='🟢 Đã đồng bộ';$('syncBadge').style.color='var(--grn)';
+    toast('✓ Đã đồng bộ '+ok+' bảng')
+  }catch(e){toast('⚠ Lỗi');console.error(e)}}
+
+// ═══ RENDER ═══
+function renderAll(){renderStats();renderTabs();renderList()}
+
+function renderStats(){
+  const s=$('statsRow');
+  const counts={companies:0,contacts:0,opportunities:0,tasks:0,activities:0};
+  ENTITY_KEYS.forEach(k=>{counts[k]=(data[k]||[]).length});
+  const openOpps=(data.opportunities||[]).filter(o=>o.opp_status==='Open'||o.stage==='Negotiation'||o.stage==='Proposal').length;
+  const pendingTasks=(data.tasks||[]).filter(t=>t.status==='To Do'||t.status==='In Progress').length;
+  const totalValue=(data.opportunities||[]).filter(o=>o.opp_status!=='Lost').reduce((s,o)=>s+(+o.potential_value||0),0);
+  s.innerHTML=`
+    <div class="st"><div class="st-lb">Companies</div><div class="st-v" style="color:var(--blu)">${counts.companies}</div></div>
+    <div class="st"><div class="st-lb">Contacts</div><div class="st-v" style="color:var(--grn)">${counts.contacts}</div></div>
+    <div class="st"><div class="st-lb">Open Opps</div><div class="st-v" style="color:var(--org)">${openOpps}</div></div>
+    <div class="st"><div class="st-lb">Pipeline Value</div><div class="st-v" style="color:var(--pur)">${totalValue>0?'$'+totalValue.toLocaleString():'$0'}</div></div>
+    <div class="st"><div class="st-lb">Pending Tasks</div><div class="st-v" style="color:var(--pnk)">${pendingTasks}</div></div>`}
+
+function renderTabs(){
+  const c=$('tabs');c.innerHTML='';
+  ENTITY_KEYS.forEach(eid=>{
+    const e=ENTITIES[eid];const cnt=(data[eid]||[]).length;
+    const b=document.createElement('button');
+    b.className='tab'+(eid===curEntity?' a':'');
+    b.innerHTML=`${e.icon} ${e.label}<span class="cnt">${cnt}</span>`;
+    b.onclick=()=>{curEntity=eid;renderTabs();renderList()};
+    c.appendChild(b)})}
+
+function renderList(){
+  const eid=curEntity;const e=ENTITIES[eid];
+  const q=($('searchBox').value||'').toLowerCase();
+  let items=(data[eid]||[]).slice();
+
+  // Search
+  if(q){items=items.filter(item=>e.searchKeys.some(k=>(item[k]||'').toLowerCase().includes(q)))}
+
+  // Sort by most recent first
+  items.reverse();
+
+  const cols=e.fields.filter(f=>f.listCol);
+  let h='<table class="dt"><thead><tr><th>#</th>';
+  cols.forEach(f=>{h+=`<th>${f.l}</th>`});
+  h+='</tr></thead><tbody>';
+
+  if(items.length===0){h+=`<tr><td colspan="${cols.length+1}" style="text-align:center;padding:40px;color:var(--t3)">Chưa có dữ liệu. Bấm "+ Thêm mới" để bắt đầu.</td></tr>`}
+  else{items.forEach((item,idx)=>{
+    const realIdx=(data[eid]||[]).indexOf(item);
+    h+=`<tr onclick="openForm(${realIdx})"><td style="color:var(--t3)">${items.length-idx}</td>`;
+    cols.forEach(f=>{
+      let v=item[f.k]||'';
+      if(f.computed&&f.k==='full_name')v=(item.first_name||'')+' '+(item.last_name||'');
+      if(f.badge&&v)v=`<span class="badge badge-${badgeClass(v)}">${v}</span>`;
+      if(f.type==='number'&&v)v=Number(v).toLocaleString();
+      h+=`<td>${v}</td>`});
+    h+='</tr>'})}
+
+  h+='</tbody></table>';
+  $('tableWrap').innerHTML=h}
+
+// ═══ FORM ═══
+function openForm(idx){
+  editIdx=typeof idx==='number'?idx:-1;
+  const eid=curEntity;const e=ENTITIES[eid];
+  const item=editIdx>=0?(data[eid]||[])[editIdx]:{};
+
+  $('formTitle').textContent=editIdx>=0?'Sửa '+e.label.slice(0,-1):'Thêm '+e.label.slice(0,-1)+' mới';
+  $('btnDel').style.display=editIdx>=0?'':'none';
+
+  let h='';
+  e.fields.forEach(f=>{
+    if(f.auto&&editIdx<0)return; // skip auto ID for new records
+    if(f.computed)return;
+    const val=item[f.k]||'';
+    const cls=f.type==='textarea'?'full':'';
+    h+=`<div class="form-group ${cls}"><label>${f.l}${f.required?' *':''}</label>`;
+    if(f.type==='select'){
+      h+=`<select data-key="${f.k}"><option value="">-- Chọn --</option>`;
+      (f.opts||[]).forEach(o=>{h+=`<option value="${o}"${val===o?' selected':''}>${o}</option>`});
+      h+=`</select>`}
+    else if(f.type==='textarea'){h+=`<textarea data-key="${f.k}">${val}</textarea>`}
+    else{h+=`<input type="${f.type||'text'}" data-key="${f.k}" value="${val}"${f.auto?' readonly style="background:var(--bg)"':''}>`}
+    h+=`</div>`});
+
+  $('formFields').innerHTML=h;
+  $('modalBg').classList.add('show')}
+
+function closeForm(){$('modalBg').classList.remove('show');editIdx=-1}
+
+function saveForm(){
+  const eid=curEntity;const e=ENTITIES[eid];
+  if(!data[eid])data[eid]=[];
+
+  const record=editIdx>=0?{...data[eid][editIdx]}:{};
+
+  // Read form values
+  $('formFields').querySelectorAll('[data-key]').forEach(el=>{
+    record[el.dataset.key]=el.value.trim()});
+
+  // Auto-generate ID for new records
+  if(editIdx<0){
+    const idField=e.fields.find(f=>f.auto);
+    if(idField)record[idField.k]=genId()}
+
+  // Compute full_name for contacts
+  if(eid==='contacts')record.full_name=(record.first_name||'')+' '+(record.last_name||'');
+
+  // Validate required
+  const missing=e.fields.filter(f=>f.required&&!record[f.k]);
+  if(missing.length){toast('⚠ Thiếu: '+missing.map(f=>f.l).join(', '));return}
+
+  // Save
+  if(editIdx>=0){data[eid][editIdx]=record}
+  else{data[eid].push(record)}
+
+  saveLocal();closeForm();renderAll();
+  toast(editIdx>=0?'✓ Đã cập nhật':'✓ Đã thêm mới')}
+
+function deleteRecord(){
+  if(!confirm('Xoá bản ghi này?'))return;
+  const eid=curEntity;
+  if(editIdx>=0&&data[eid]){data[eid].splice(editIdx,1);saveLocal();closeForm();renderAll();toast('✓ Đã xoá')}}
+
+// ═══ EXPORT CSV ═══
+function exportAll(){
+  const eid=curEntity;const e=ENTITIES[eid];
+  const items=data[eid]||[];if(!items.length){toast('Không có data');return}
+  const cols=e.fields.filter(f=>!f.computed);
+  const hdr=cols.map(f=>f.l).join(',');
+  const rows=[hdr,...items.map(item=>cols.map(f=>{let v=item[f.k]||'';v=String(v).replace(/"/g,'""');return v.includes(',')?`"${v}"`:v}).join(','))];
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'}));
+  a.download=`CRM_${eid}_${new Date().toISOString().slice(0,10)}.csv`;a.click();toast('✓ Đã xuất CSV')}
+
+// ═══ INIT ═══
+document.addEventListener('DOMContentLoaded',async()=>{
+  data=loadLocal();
+  // Init empty arrays
+  ENTITY_KEYS.forEach(k=>{if(!data[k])data[k]=[]});
+  renderAll();
+  // Auto pull on first load if cloud configured and local is empty
+  const totalLocal=ENTITY_KEYS.reduce((s,k)=>s+(data[k]||[]).length,0);
+  if(_cloudOK&&totalLocal===0)await syncPull();
+  else if(_cloudOK){$('syncBadge').textContent='☁ Sẵn sàng';$('syncBadge').style.color='var(--t3)'}
+  else{$('syncBadge').textContent='⚪ Offline'}
+});
+</script>
+</body>
+</html>
