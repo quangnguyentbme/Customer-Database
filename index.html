@@ -81,8 +81,7 @@ table.dt tr{cursor:pointer}
 <div class="hdr">
   <div><h1>Sales CRM</h1><p>Airlines & Hospitality · <span id="syncBadge" style="font-size:11px;font-weight:500;color:var(--t3)"></span></p></div>
   <div class="hdr-act">
-    <button class="btn btn-g" onclick="syncPull()">↓ Tải về</button>
-    <button class="btn btn-b" onclick="syncPush()">↑ Đồng bộ</button>
+    <button class="btn btn-b" onclick="syncBoth()">☁ Đồng bộ</button>
     <button class="btn btn-o" onclick="exportAll()">↓ CSV</button>
   </div>
 </div>
@@ -339,6 +338,11 @@ async function syncPull(){
     toast('✓ Đã tải '+rows.length+' bảng từ cloud')
   }catch(e){toast('⚠ Offline');console.error(e)}}
 
+async function syncBoth(){
+  if(!_cloudOK){toast('⚠ Chưa cấu hình');return}
+  toast('🔄 Đang đồng bộ...');
+  await syncPull();await syncPush();
+  toast('✓ Đã đồng bộ 2 chiều')}
 async function syncPush(){
   if(!_cloudOK){toast('⚠ Chưa cấu hình');return}
   toast('↑ Đang đồng bộ...');
@@ -549,7 +553,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
   renderAll();
   // Auto pull on first load if cloud configured and local is empty
   const totalLocal=ENTITY_KEYS.reduce((s,k)=>s+(data[k]||[]).length,0);
-  if(_cloudOK&&totalLocal===0)await syncPull();
+    if(_cloudOK&&totalLocal===0)await syncPull();
   else if(_cloudOK){$('syncBadge').textContent='☁ Sẵn sàng';$('syncBadge').style.color='var(--t3)'}
   else{$('syncBadge').textContent='⚪ Offline'}
 });
