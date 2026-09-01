@@ -81,7 +81,8 @@ table.dt tr{cursor:pointer}
 <div class="hdr">
   <div><h1>Sales CRM</h1><p>Airlines & Hospitality · <span id="syncBadge" style="font-size:11px;font-weight:500;color:var(--t3)"></span></p></div>
   <div class="hdr-act">
-    <button class="btn btn-b" onclick="syncBoth()">☁ Đồng bộ</button>
+    <button class="btn btn-b" onclick="syncBoth()">↑ Đẩy lên</button>
+    <button class="btn btn-g" onclick="syncPull()">↓ Tải về</button>
     <button class="btn btn-o" onclick="exportAll()">↓ CSV</button>
   </div>
 </div>
@@ -332,17 +333,18 @@ async function syncPull(){
   try{const res=await fetch(SUPABASE_URL+'/rest/v1/crm_data?select=id,data',{headers:_sbH});
     if(!res.ok){toast('⚠ Lỗi '+res.status);return}
     const rows=await res.json();
-    rows.forEach(r=>{if(r.data&&Array.isArray(r.data)&&r.data.length>0)data[r.id]=r.data});
+    let count=0;
+    rows.forEach(r=>{if(r.data&&Array.isArray(r.data)&&r.data.length>0){
+      const localArr=data[r.id]||[];
+      if(localArr.length===0){data[r.id]=r.data;count++}}});
     saveLocal();renderAll();
     $('syncBadge').textContent='🟢 Đã tải về';$('syncBadge').style.color='var(--grn)';
-    toast('✓ Đã tải '+rows.length+' bảng từ cloud')
+    toast('✓ Đã tải '+count+' bảng từ cloud')
   }catch(e){toast('⚠ Offline');console.error(e)}}
 
 async function syncBoth(){
   if(!_cloudOK){toast('⚠ Chưa cấu hình');return}
-  toast('🔄 Đang đồng bộ...');
-  await syncPush();await syncPull();
-  toast('✓ Đã đồng bộ 2 chiều')}
+  await syncPush()}
 async function syncPush(){
   if(!_cloudOK){toast('⚠ Chưa cấu hình');return}
   toast('↑ Đang đồng bộ...');
