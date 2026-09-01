@@ -638,7 +638,7 @@ function exportAll(){
   const items=data[eid]||[];if(!items.length){toast('Không có data');return}
   const cols=e.fields.filter(f=>!f.computed);
   const hdr=cols.map(f=>f.l).join(',');
-  const rows=[hdr,...items.map(item=>cols.map(f=>{let v=item[f.k]||'';v=String(v).replace(/"/g,'""');return v.includes(',')?`"${v}"`:v}).join(','))];
+  const rows=[hdr,...items.map(item=>cols.map(f=>{let v=item[f.k]||'';v=String(v).toUpperCase().replace(/"/g,'""');return v.includes(',')?`"${v}"`:v}).join(','))];
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'}));
   a.download=`CRM_${eid}_${new Date().toISOString().slice(0,10)}.csv`;a.click();toast('✓ Đã xuất CSV')}
 
