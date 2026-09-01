@@ -97,7 +97,7 @@ table.dt tr{cursor:pointer}
     <button class="btn" style="background:var(--bg);color:var(--t2)" onclick="toggleColPanel()">⚙ Cột</button>
     <button class="btn btn-b" onclick="openForm()">+ Thêm mới</button>
   </div>
-  <div id="colPanel" style="display:none" class="cd"><div class="cd-t">Chọn cột hiển thị</div><div class="col-toggle" id="colToggle"></div></div>
+  <div id="colPanel" style="display:none" class="cd"><div class="cd-t">SELECT cột hiển thị</div><div class="col-toggle" id="colToggle"></div></div>
 <div class="cd"><div class="tbl-wrap" id="tableWrap"></div></div>
 </div>
 
@@ -570,13 +570,13 @@ function openForm(idx){
     h+=`<div class="form-group ${cls}"><label>${f.l}${f.required?' *':''}</label>`;
     if(f.k==='company_name'&&f.type==='text'){
       const companies=(data.companies||[]).map(c=>c.company_name).filter(Boolean).sort();
-      h+=`<select data-key="${f.k}"><option value="">-- Chọn Company --</option>`;
+      h+=`<select data-key="${f.k}"><option value="">-- SELECT Company --</option>`;
       companies.forEach(c=>{h+=`<option value="${c}"${val===c?' selected':''}>${c}</option>`});
       h+=`<option value="__other">+ Nhập thủ công</option></select>`;
       h+=`<input type="text" data-key="${f.k}_manual" placeholder="Nhập tên mới..." style="display:none;margin-top:4px">`;
       h+=`</div>`;return}
     if(f.type==='select'){
-      h+=`<select data-key="${f.k}"><option value="">-- Chọn --</option>`;
+      h+=`<select data-key="${f.k}"><option value="">-- SELECT --</option>`;
       (f.opts||[]).forEach(o=>{h+=`<option value="${o}"${val===o?' selected':''}>${o}</option>`});
       h+=`</select>`}
     else if(f.type==='textarea'){h+=`<textarea data-key="${f.k}">${val}</textarea>`}
