@@ -326,33 +326,53 @@ function loadLocal(){try{const d=localStorage.getItem(LS_KEY);return d?JSON.pars
 function saveLocal(){try{localStorage.setItem(LS_KEY,JSON.stringify(data))}catch(e){console.error(e)}}
 
 // ═══ SUPABASE SYNC ═══
+let _pullDone=false;
+
 async function syncPull(){
   if(!_cloudOK){toast('⚠ Chưa cấu hình Supabase');return}
-  toast('↓ Đang tải...');
+  $('syncBadge').textContent='🔄 Đang tải...';$('syncBadge').style.color='var(--blu)';
   try{const res=await fetch(SUPABASE_URL+'/rest/v1/crm_data?select=id,data',{headers:_sbH});
-    if(!res.ok){toast('⚠ Lỗi '+res.status);return}
+    if(!res.ok){$('syncBadge').textContent='🔴 Lỗi';$('syncBadge').style.color='var(--pnk)';return}
     const rows=await res.json();
-    let count=0;
-    rows.forEach(r=>{if(r.data&&Array.isArray(r.data)&&r.data.length>0){
-      const localArr=data[r.id]||[];
-      if(localArr.length===0){data[r.id]=r.data;count++}}});
+    // Cloud is master — always load cloud data
+    rows.forEach(r=>{if(r.data&&Array.isArray(r.data)&&r.data.length>0){data[r.id]=r.data}});
+    _pullDone=true;
     saveLocal();renderAll();
-    $('syncBadge').textContent='🟢 Đã tải về';$('syncBadge').style.color='var(--grn)';
-    toast('✓ Đã tải '+count+' bảng từ cloud')
-  }catch(e){toast('⚠ Offline');console.error(e)}}
+    $('syncBadge').textContent='🟢 Đã đồng bộ';$('syncBadge').style.color='var(--grn)'
+  }catch(e){$('syncBadge').textContent='🔴 Offline';$('syncBadge').style.color='var(--pnk)';console.error(e)}}
 
-async function syncBoth(){
-  if(!_cloudOK){toast('⚠ Chưa cấu hình');return}
-  await syncPush()}
+function autoPush(){
+  if(!_cloudOK)return;
+  // NEVER push if pull hasn't completed
+  if(!_pullDone)return;
+  // Don't push if no real data
+  const hasData=ENTITY_KEYS.some(k=>(data[k]||[]).length>0);
+  if(!hasData)return;
+  ENTITY_KEYS.forEach(eid=>{
+    const arr=data[eid]||[];
+    if(arr.length>0){
+      try{fetch(SUPABASE_URL+'/rest/v1/crm_data?id=eq.'+eid,{method:'PATCH',keepalive:true,
+        headers:_sbH,body:JSON.stringify({data:arr,updated_at:new Date().toISOString()})})}catch(e){console.error(e)}}})}
+
 async function syncPush(){
   if(!_cloudOK){toast('⚠ Chưa cấu hình');return}
-  toast('↑ Đang đồng bộ...');
-  try{let ok=0;
+  toast('🔄 Đang đồng bộ...');
+  try{
+    // Pull first — merge: cloud fills gaps, local wins
+    const res=await fetch(SUPABASE_URL+'/rest/v1/crm_data?select=id,data',{headers:_sbH});
+    if(res.ok){const rows=await res.json();
+      rows.forEach(r=>{if(r.data&&Array.isArray(r.data)&&r.data.length>0){
+        const localArr=data[r.id]||[];
+        if(localArr.length===0){data[r.id]=r.data}}})}
+    saveLocal();renderAll();
+    // Then push merged data
+    let ok=0;
     for(const eid of ENTITY_KEYS){
       const arr=data[eid]||[];
       const r=await fetch(SUPABASE_URL+'/rest/v1/crm_data?id=eq.'+eid,{method:'PATCH',
         headers:_sbH,body:JSON.stringify({data:arr,updated_at:new Date().toISOString()})});
       if(r.ok)ok++}
+    _pullDone=true;
     $('syncBadge').textContent='🟢 Đã đồng bộ';$('syncBadge').style.color='var(--grn)';
     toast('✓ Đã đồng bộ '+ok+' bảng')
   }catch(e){toast('⚠ Lỗi');console.error(e)}}
@@ -547,14 +567,9 @@ function exportAll(){
   a.download=`CRM_${eid}_${new Date().toISOString().slice(0,10)}.csv`;a.click();toast('✓ Đã xuất CSV')}
 
 // ═══ INIT ═══
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&_cloudOK){
-  ENTITY_KEYS.filter(k=>(data[k]||[]).length>0).forEach(eid=>{
-    fetch(SUPABASE_URL+'/rest/v1/crm_data?id=eq.'+eid,{method:'PATCH',keepalive:true,
-      headers:_sbH,body:JSON.stringify({data:data[eid],updated_at:new Date().toISOString()})})})}});
-window.addEventListener('beforeunload',()=>{if(_cloudOK){
-  ENTITY_KEYS.filter(k=>(data[k]||[]).length>0).forEach(eid=>{
-    fetch(SUPABASE_URL+'/rest/v1/crm_data?id=eq.'+eid,{method:'PATCH',keepalive:true,
-      headers:_sbH,body:JSON.stringify({data:data[eid],updated_at:new Date().toISOString()})})})}});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){autoPush()}});
+window.addEventListener('beforeunload',()=>{autoPush()});
+window.addEventListener('pagehide',()=>{autoPush()});
 
 document.addEventListener('DOMContentLoaded',async()=>{
   data=loadLocal();
