@@ -20,6 +20,7 @@ select,select option,input,textarea{ text-transform:uppercase}
 .btn-b{background:var(--blu);color:#fff}.btn-b:hover{background:#006ae0}
 .btn-g{background:var(--gbg);color:var(--grn)}.btn-o{background:var(--obg);color:var(--org)}
 .btn-p{background:var(--pbg);color:var(--pnk)}
+
 /* Tabs */
 .tabs{display:flex;gap:3px;margin-bottom:16px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
 .tab{flex-shrink:0;font-family:inherit;font-size:15px;font-weight:500;padding:7px 14px;border-radius:99px;border:1px solid var(--bl);background:var(--w);color:var(--t2);cursor:pointer;transition:all .2s;white-space:nowrap}
@@ -27,22 +28,26 @@ select,select option,input,textarea{ text-transform:uppercase}
 .tab.a{background:var(--blu);border-color:var(--blu);color:#fff}
 .tab .cnt{font-size:px;background:rgba(255,255,255,.3);padding:1px 5px;border-radius:99px;margin-left:4px}
 .tab.a .cnt{background:rgba(255,255,255,.3)}
+
 /* Stats */
 .sts{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
 .st{background:var(--w);border-radius:var(--r);padding:14px;box-shadow:var(--sh)}
 .st-v{font-size:24px;font-weight:600}
 .st-lb{font-size:12px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px}
+
 /* Card */
 .cd{background:var(--w);border-radius:var(--r);padding:20px;box-shadow:var(--sh);margin-bottom:14px}
 .cd-t{font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px}
+
 /* Search */
 .search-bar{display:flex;gap:8px;margin-bottom:14px}
 .search-input{flex:1;font-family:inherit;font-size:13px;padding:9px 14px;border:1px solid var(--bl);border-radius:var(--rs);outline:none;transition:border-color .2s}
 .search-input:focus{border-color:var(--blu)}
+
 /* Table */
 .tbl-wrap{overflow-x:auto}
 table.dt{width:100%;border-collapse:collapse;font-size:11px;white-space:nowrap}
-table.dt th,table.dt td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--bl);}
+table.dt th,table.dt td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--bl)}
 table.dt td{text-transform:uppercase;}
 table.dt th{background:var(--bg);font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;font-size:11px;position:sticky;top:0;z-index:1}
 table.dt tr:hover{background:var(--bbg)}
@@ -53,6 +58,7 @@ table.dt tr{cursor:pointer}
 .badge-o{background:var(--obg);color:var(--org)}
 .badge-p{background:var(--pbg);color:var(--pnk)}
 .badge-gr{background:var(--bg);color:var(--t3)}
+
 /* Modal */
 .modal-bg{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);z-index:999;display:none;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
 .modal-bg.show{display:flex}
@@ -75,100 +81,20 @@ table.dt tr{cursor:pointer}
 .filter-input:focus{border-color:var(--blu)}
 @media(max-width:900px){.sts{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.sts{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.app{padding:16px 10px 60px}}
-.dt th{
-  position:relative;
-}
-
-.col-filter-menu{
-  display:none;
-  position:fixed;
-  z-index:99999;
-  width:230px;
-  background:#fff;
-  border:1px solid #d2d2d7;
-  border-radius:10px;
-  box-shadow:0 6px 24px rgba(0,0,0,.16);
-  padding:10px;
-  text-align:left;
-  font-weight:400;
-}
-
-.col-filter-menu.show{
-  display:block;
-}
-
-.col-filter-search{
-  width:100%;
-  border:1px solid #d2d2d7;
-  border-radius:6px;
-  padding:6px 8px;
-  font-family:inherit;
-  font-size:11px;
-  margin-bottom:8px;
-}
-
-.col-filter-actions{
-  display:flex;
-  gap:5px;
-  margin-bottom:7px;
-  padding-bottom:7px;
-  border-bottom:1px solid #e8e8ed;
-}
-
+.dt th{ position:relative; }
+.col-filter-menu{ display:none; position:fixed; z-index:99999; width:230px; background:#fff; border:1px solid #d2d2d7; border-radius:10px; box-shadow:0 6px 24px rgba(0,0,0,.16); padding:10px; text-align:left; font-weight:400; }
+.col-filter-menu.show{ display:block; }
+.col-filter-search{ width:100%; border:1px solid #d2d2d7; border-radius:6px; padding:6px 8px; font-family:inherit; font-size:11px; margin-bottom:8px; }
+.col-filter-actions{ display:flex; gap:5px; margin-bottom:7px; padding-bottom:7px; border-bottom:1px solid #e8e8ed; }
 .col-filter-actions button,
-.col-filter-footer button{
-  border:0;
-  border-radius:6px;
-  padding:5px 8px;
-  font-family:inherit;
-  font-size:10px;
-  cursor:pointer;
-}
-
-.col-filter-options{
-  max-height:180px;
-  overflow-y:auto;
-  overflow-x:hidden;
-  padding-right:3px;
-}
-
-.col-filter-option{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  padding:5px 3px;
-  font-size:11px;
-  cursor:pointer;
-  text-transform:uppercase;
-}
-
-.col-filter-option:hover{
-  background:#f5f5f7;
-}
-
-.col-filter-option input{
-  margin:0;
-}
-
-.col-filter-footer{
-  display:flex;
-  justify-content:flex-end;
-  gap:5px;
-  margin-top:7px;
-  padding-top:7px;
-  border-top:1px solid #e8e8ed;
-  background:#fff;
-}
-
-.col-filter-clear{
-  background:#f5f5f7;
-  color:#6e6e73;
-}
-
-.col-filter-apply{
-  background:#007aff;
-  color:#fff;
-}
+.col-filter-footer button{ border:0; border-radius:6px; padding:5px 8px; font-family:inherit; font-size:10px; cursor:pointer; }
+.col-filter-options{ max-height:180px; overflow-y:auto; overflow-x:hidden; padding-right:3px; }
+.col-filter-option{ display:flex; align-items:center; gap:7px; padding:5px 3px; font-size:11px; cursor:pointer; text-transform:uppercase; }
+.col-filter-option:hover{ background:#f5f5f7; }
+.col-filter-option input{ margin:0; }
+.col-filter-footer{ display:flex; justify-content:flex-end; gap:5px; margin-top:7px; padding-top:7px; border-top:1px solid #e8e8ed; background:#fff; }
+.col-filter-clear{ background:#f5f5f7; color:#6e6e73; }
+.col-filter-apply{ background:#007aff; color:#fff; }
 .filter-funnel{border:none;background:transparent;outline:none;box-shadow:none}
 .filter-funnel.active{color:var(--blu);font-weight:700}
 </style>
@@ -181,6 +107,7 @@ table.dt tr{cursor:pointer}
   <div class="hdr-act">
     <button class="btn btn-b" onclick="syncPush()">☁ Sync</button>
     <button class="btn btn-o" onclick="exportAll()">↓ CSV</button>
+    <button class="btn btn-g" onclick="exportHistory()">↓ History CSV</button>
   </div>
 </div>
 
@@ -199,13 +126,13 @@ table.dt tr{cursor:pointer}
 
 </div>
 
-<div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeForm()">
+<div class="modal-bg" id="modalBg">
   <div class="modal" id="modal">
     <h2 id="formTitle">Add New</h2>
     <div class="form-grid" id="formFields"></div>
     <div class="form-actions">
       <button class="btn btn-p" id="btnDel" style="margin-right:auto;display:none" onclick="deleteRecord()">Delete</button>
-      <button class="btn" style="background:var(--bg);color:var(--t2)" onclick="closeForm()">Cancel</button>
+      <button class="btn" style="background:var(--bg);color:var(--t2)" onclick="cancelForm()">Cancel</button>
       <button class="btn btn-b" onclick="saveForm()">Save</button>
     </div>
   </div>
@@ -214,6 +141,7 @@ table.dt tr{cursor:pointer}
 <div class="toast" id="toast"></div>
 
 <script>
+
 // ═══ SUPABASE CONFIG ═══
 const SUPABASE_URL = 'https://mvxemtvhioomjxaygksl.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im12eGVtdHZoaW9vbWp4YXlna3NsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMTYxNjEsImV4cCI6MjEwMzc5MjE2MX0.DtiiRU0tBDlZasDW4aIxpnO359UFruVK86SlXfoWHeU';
@@ -233,78 +161,9 @@ const ENTITIES={
       {k:'company_type',l:'Company Type',type:'select',opts:['TRAVEL AGENT','TOUR OPERATOR','OTA','TMC','AIRLINE','HOTEL','DMC','MICE','CONSOLIDATOR','CORPORATE','GSA','OTHER'],listCol:true},
       {k:'business_model',l:'Business Model',type:'select',opts:['B2B','B2C','B2B2C','Marketplace','Distributor','Manufacturer','Retailer','Service Provider','Other'],listCol:true},
       {k:'industry',l:'Industry',type:'select',opts:['Airlines','Hospitality','Travel','MICE','Corporate','Cruise','Other']},
-      {k:'country',l:'Country',type:'select',opts:[
-  'Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda','Argentina','Armenia','Australia','Austria','Azerbaijan',
-  'Bahamas','Bahrain','Bangladesh','Barbados','Belarus','Belgium','Belize','Benin','Bhutan','Bolivia','Bosnia and Herzegovina','Botswana','Brazil','Brunei Darussalam','Bulgaria','Burkina Faso','Burundi',
-  'Cabo Verde','Cambodia','Cameroon','Canada','Central African Republic','Chad','Chile','China','Colombia','Comoros','Congo','Costa Rica',"Côte d'Ivoire",'Croatia','Cuba','Cyprus','Czechia',
-  "Democratic People's Republic of Korea",'Democratic Republic of the Congo','Denmark','Djibouti','Dominica','Dominican Republic',
-  'Ecuador','Egypt','El Salvador','Equatorial Guinea','Eritrea','Estonia','Eswatini','Ethiopia',
-  'Fiji','Finland','France',
-  'Gabon','Gambia','Georgia','Germany','Ghana','Greece','Grenada','Guatemala','Guinea','Guinea-Bissau','Guyana',
-  'Haiti','Honduras','Hungary',
-  'Iceland','India','Indonesia','Iran','Iraq','Ireland','Israel','Italy',
-  'Jamaica','Japan','Jordan',
-  'Kazakhstan','Kenya','Kiribati','Kuwait','Kyrgyzstan',
-  'Laos','Latvia','Lebanon','Lesotho','Liberia','Libya','Liechtenstein','Lithuania','Luxembourg',
-  'Madagascar','Malawi','Malaysia','Maldives','Mali','Malta','Marshall Islands','Mauritania','Mauritius','Mexico','Micronesia','Moldova','Monaco','Mongolia','Montenegro','Morocco','Mozambique','Myanmar',
-  'Namibia','Nauru','Nepal','Netherlands','New Zealand','Nicaragua','Niger','Nigeria','North Korea','North Macedonia','Norway',
-  'Oman',
-  'Pakistan','Palau','Palestine','Panama','Papua New Guinea','Paraguay','Peru','Philippines','Poland','Portugal',
-  'Qatar',
-  'Romania','Russia','Rwanda',
-  'Saint Kitts and Nevis','Saint Lucia','Saint Vincent and the Grenadines','Samoa','San Marino','Sao Tome and Principe','Saudi Arabia','Senegal','Serbia','Seychelles','Sierra Leone','Singapore','Slovakia','Slovenia','Solomon Islands','Somalia','South Africa','South Korea','South Sudan','Spain','Sri Lanka','Sudan','Suriname','Sweden','Switzerland','Syria',
-  'Taiwan','Tajikistan','Tanzania','Thailand','Timor-Leste','Togo','Tonga','Trinidad and Tobago','Tunisia','Türkiye','Turkmenistan','Tuvalu',
-  'Uganda','Ukraine','United Arab Emirates','United Kingdom','United States','Uruguay','Uzbekistan',
-  'Vanuatu','Vatican City','Venezuela','Vietnam',
-  'Yemen',
-  'Zambia','Zimbabwe'
-],listCol:true},
-      {k:'market',l:'Market',type:'select',opts:[
-  'Vietnam',
-  'Southeast Asia',
-  'Northeast Asia',
-  'South Asia',
-  'Central Asia',
-  'Russia & CIS',
-  'Caucasus',
-  'Middle East',
-  'Western Europe',
-  'Northern Europe',
-  'Southern Europe',
-  'Central Europe',
-  'Eastern Europe',
-  'Europe',
-  'North America',
-  'Central America',
-  'Caribbean',
-  'South America',
-  'Latin America',
-  'Africa',
-  'Oceania',
-  'Global',
-  'Other'
-],listCol:true},
-      {k:'region',l:'Region',type:'select',opts:[
-  'Western Europe',
-  'Northern Europe',
-  'Southern Europe',
-  'Eastern Europe',
-  'Central Europe',
-  'CIS',
-  'Caucasus',
-  'Central Asia',
-  'Middle East',
-  'North Africa',
-  'Sub-Saharan Africa',
-  'North America',
-  'Central America',
-  'Caribbean',
-  'South America',
-  'Northeast Asia',
-  'Southeast Asia',
-  'South Asia',
-  'Oceania'
-],listCol:true},
+      {k:'country',l:'Country',type:'select',opts:[ 'Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda','Argentina','Armenia','Australia','Austria','Azerbaijan', 'Bahamas','Bahrain','Bangladesh','Barbados','Belarus','Belgium','Belize','Benin','Bhutan','Bolivia','Bosnia and Herzegovina','Botswana','Brazil','Brunei Darussalam','Bulgaria','Burkina Faso','Burundi', 'Cabo Verde','Cambodia','Cameroon','Canada','Central African Republic','Chad','Chile','China','Colombia','Comoros','Congo','Costa Rica',"Côte d'Ivoire",'Croatia','Cuba','Cyprus','Czechia', "Democratic People's Republic of Korea",'Democratic Republic of the Congo','Denmark','Djibouti','Dominica','Dominican Republic', 'Ecuador','Egypt','El Salvador','Equatorial Guinea','Eritrea','Estonia','Eswatini','Ethiopia', 'Fiji','Finland','France', 'Gabon','Gambia','Georgia','Germany','Ghana','Greece','Grenada','Guatemala','Guinea','Guinea-Bissau','Guyana', 'Haiti','Honduras','Hungary', 'Iceland','India','Indonesia','Iran','Iraq','Ireland','Israel','Italy', 'Jamaica','Japan','Jordan', 'Kazakhstan','Kenya','Kiribati','Kuwait','Kyrgyzstan', 'Laos','Latvia','Lebanon','Lesotho','Liberia','Libya','Liechtenstein','Lithuania','Luxembourg', 'Madagascar','Malawi','Malaysia','Maldives','Mali','Malta','Marshall Islands','Mauritania','Mauritius','Mexico','Micronesia','Moldova','Monaco','Mongolia','Montenegro','Morocco','Mozambique','Myanmar', 'Namibia','Nauru','Nepal','Netherlands','New Zealand','Nicaragua','Niger','Nigeria','North Korea','North Macedonia','Norway', 'Oman', 'Pakistan','Palau','Palestine','Panama','Papua New Guinea','Paraguay','Peru','Philippines','Poland','Portugal', 'Qatar', 'Romania','Russia','Rwanda', 'Saint Kitts and Nevis','Saint Lucia','Saint Vincent and the Grenadines','Samoa','San Marino','Sao Tome and Principe','Saudi Arabia','Senegal','Serbia','Seychelles','Sierra Leone','Singapore','Slovakia','Slovenia','Solomon Islands','Somalia','South Africa','South Korea','South Sudan','Spain','Sri Lanka','Sudan','Suriname','Sweden','Switzerland','Syria', 'Taiwan','Tajikistan','Tanzania','Thailand','Timor-Leste','Togo','Tonga','Trinidad and Tobago','Tunisia','Türkiye','Turkmenistan','Tuvalu', 'Uganda','Ukraine','United Arab Emirates','United Kingdom','United States','Uruguay','Uzbekistan', 'Vanuatu','Vatican City','Venezuela','Vietnam', 'Yemen', 'Zambia','Zimbabwe' ],listCol:true},
+      {k:'market',l:'Market',type:'select',opts:[ 'Vietnam', 'Southeast Asia', 'Northeast Asia', 'South Asia', 'Central Asia', 'Russia & CIS', 'Caucasus', 'Middle East', 'Western Europe', 'Northern Europe', 'Southern Europe', 'Central Europe', 'Eastern Europe', 'Europe', 'North America', 'Central America', 'Caribbean', 'South America', 'Latin America', 'Africa', 'Oceania', 'Global', 'Other' ],listCol:true},
+      {k:'region',l:'Region',type:'select',opts:[ 'Western Europe', 'Northern Europe', 'Southern Europe', 'Eastern Europe', 'Central Europe', 'CIS', 'Caucasus', 'Central Asia', 'Middle East', 'North Africa', 'Sub-Saharan Africa', 'North America', 'Central America', 'Caribbean', 'South America', 'Northeast Asia', 'Southeast Asia', 'South Asia', 'Oceania' ],listCol:true},
       {k:'city',l:'City',type:'text'},
       {k:'office_branch',l:'Office / Branch',type:'text'},
       {k:'website',l:'Website',type:'text'},
@@ -485,6 +344,7 @@ const ENTITY_KEYS=Object.keys(ENTITIES);
 let curEntity='companies';
 let data={};
 let editIdx=-1;
+let formSnapshot='';
 
 // ═══ HELPERS ═══
 const $=id=>document.getElementById(id);
@@ -499,55 +359,44 @@ function saveLocal(){try{localStorage.setItem(LS_KEY,JSON.stringify(data))}catch
 
 // ═══ SUPABASE SYNC ═══
 let _pullDone=false;
+let _historyOK=false;
 
 async function syncPull(){
-  if(!_cloudOK){toast('⚠ Supabase unconfigured');return}
+  if(!_cloudOK){toast('⚠ Supabase unconfigured');return false}
   $('syncBadge').textContent='🔄 Loading...';$('syncBadge').style.color='var(--blu)';
   try{const res=await fetch(SUPABASE_URL+'/rest/v1/crm_data?select=id,data',{headers:_sbH});
-    if(!res.ok){$('syncBadge').textContent='🔴 Error';$('syncBadge').style.color='var(--pnk)';return}
+    if(!res.ok){$('syncBadge').textContent='🔴 Error';$('syncBadge').style.color='var(--pnk)';console.error('Cloud load error:',await res.text());return false}
     const rows=await res.json();
-    // Cloud is master — always load cloud data
-    rows.forEach(r=>{if(r.data&&Array.isArray(r.data)&&r.data.length>0){data[r.id]=r.data}});
-    _pullDone=true;
-    saveLocal();renderAll();
-    $('syncBadge').textContent='🟢 Loaded';$('syncBadge').style.color='var(--grn)'
-  }catch(e){$('syncBadge').textContent='🔴 Offline';$('syncBadge').style.color='var(--pnk)';console.error(e)}}
+    // Cloud is master — IMPORTANT: [] is also valid and must clear stale local data.
+    rows.forEach(r=>{if(Array.isArray(r.data)){data[r.id]=r.data}});
+    _pullDone=true;saveLocal();renderAll();
+    $('syncBadge').textContent='🟢 Loaded';$('syncBadge').style.color='var(--grn)';return true
+  }catch(e){$('syncBadge').textContent='🔴 Offline';$('syncBadge').style.color='var(--pnk)';console.error(e);return false}}
+
+async function checkHistoryReady(){
+  if(!_cloudOK)return false;
+  try{const r=await fetch(SUPABASE_URL+'/rest/v1/crm_history_records?select=history_id&limit=1',{headers:_sbH});_historyOK=r.ok;if(!r.ok)console.error('History archive not ready:',await r.text());return _historyOK}catch(e){console.error('History archive check failed:',e);_historyOK=false;return false}}
+
+async function pushEntityData(eid,arr,keepalive=false){
+  if(!_cloudOK||!_pullDone||!_historyOK)return false;
+  try{const r=await fetch(SUPABASE_URL+'/rest/v1/crm_data?id=eq.'+encodeURIComponent(eid)+'&select=id',{method:'PATCH',keepalive,
+    headers:{..._sbH,'Prefer':'return=representation'},body:JSON.stringify({data:arr,updated_at:new Date().toISOString()})});
+    if(!r.ok){console.error('Cloud save error:',await r.text());return false}const rows=await r.json();if(!Array.isArray(rows)||rows.length!==1){console.error('Cloud save error: crm_data row missing for',eid);return false}return true
+  }catch(e){console.error('Cloud save error:',e);return false}}
 
 function autoPush(){
-  if(!_cloudOK)return;
-  // NEVER push if pull hasn't completed
-  if(!_pullDone)return;
-  // Don't push if no real data
-  const hasData=ENTITY_KEYS.some(k=>(data[k]||[]).length>0);
-  if(!hasData)return;
-  ENTITY_KEYS.forEach(eid=>{
-    const arr=data[eid]||[];
-    if(arr.length>0){
-      try{fetch(SUPABASE_URL+'/rest/v1/crm_data?id=eq.'+eid,{method:'PATCH',keepalive:true,
-        headers:_sbH,body:JSON.stringify({data:arr,updated_at:new Date().toISOString()})})}catch(e){console.error(e)}}})}
+  if(!_cloudOK||!_pullDone||!_historyOK)return;
+  ENTITY_KEYS.forEach(eid=>{pushEntityData(eid,data[eid]||[],true)})}
 
 async function syncPush(){
-  if(!_cloudOK){toast('⚠ Supabase unconfigured');return}
-  toast('🔄 Loading...');
-  try{
-    // Pull first — merge: cloud fills gaps, local wins
-    const res=await fetch(SUPABASE_URL+'/rest/v1/crm_data?select=id,data',{headers:_sbH});
-    if(res.ok){const rows=await res.json();
-      rows.forEach(r=>{if(r.data&&Array.isArray(r.data)&&r.data.length>0){
-        const localArr=data[r.id]||[];
-        if(localArr.length===0){data[r.id]=r.data}}})}
-    saveLocal();renderAll();
-    // Then push merged data
-    let ok=0;
-    for(const eid of ENTITY_KEYS){
-      const arr=data[eid]||[];
-      const r=await fetch(SUPABASE_URL+'/rest/v1/crm_data?id=eq.'+eid,{method:'PATCH',
-        headers:_sbH,body:JSON.stringify({data:arr,updated_at:new Date().toISOString()})});
-      if(r.ok)ok++}
-    _pullDone=true;
-    $('syncBadge').textContent='🟢 Loaded';$('syncBadge').style.color='var(--grn)';
-    toast('✓ Loaded '+ok+' tables')
-  }catch(e){toast('⚠ Error');console.error(e)}}
+  if(!_cloudOK){toast('⚠ Supabase unconfigured');return false}
+  if(!_pullDone){const loaded=await syncPull();if(!loaded)return false}
+  if(!_historyOK&&!(await checkHistoryReady())){toast('⚠ History archive is not ready. Nothing was pushed. Run the Record History SQL first.');$('syncBadge').textContent='🟠 History not ready';$('syncBadge').style.color='var(--org)';return false}
+  toast('🔄 Saving to Supabase...');
+  let ok=0;
+  for(const eid of ENTITY_KEYS){if(await pushEntityData(eid,data[eid]||[]))ok++}
+  if(ok===ENTITY_KEYS.length){$('syncBadge').textContent='🟢 Saved';$('syncBadge').style.color='var(--grn)';toast('✓ Saved '+ok+' tables');return true}
+  $('syncBadge').textContent='🟠 Partial';$('syncBadge').style.color='var(--org)';toast('⚠ Saved '+ok+'/'+ENTITY_KEYS.length+' tables');return false}
 
 // ═══ RENDER ═══
 function renderAll(){renderStats();renderTabs();renderList()}
@@ -573,7 +422,7 @@ function renderTabs(){
     const b=document.createElement('button');
     b.className='tab'+(eid===curEntity?' a':'');
     b.innerHTML=`${e.icon} ${e.label}<span class="cnt">${cnt}</span>`;
-    b.onclick=()=>{curEntity=eid;renderTabs();renderList()};
+    b.onclick=async()=>{if($('modalBg').classList.contains('show')){if(formHasChanges()){const leave=confirm('You have unsaved changes.\n\n'+'Press OK to SAVE before switching tabs.\n'+'Press Cancel to stay here.');if(leave){if(!(await saveForm()))return}else{return}}else{closeForm()}}curEntity=eid;renderTabs();renderList()};
     c.appendChild(b)})}
 
 let hiddenCols={};
@@ -716,19 +565,9 @@ function renderList(){
 
       cols.forEach(f=>{
         let v=item[f.k]||'';
-
-        if(f.computed&&f.k==='full_name'){
-          v=(item.first_name||'')+' '+(item.last_name||'');
-        }
-
-        if(f.badge&&v){
-          v=`<span class="badge badge-${badgeClass(v)}">${v}</span>`;
-        }
-
-        if(f.type==='number'&&v){
-          v=Number(v).toLocaleString();
-        }
-
+        if(f.computed&&f.k==='full_name'){ v=(item.first_name||'')+' '+(item.last_name||''); }
+        if(f.badge&&v){ v=`<span class="badge badge-${badgeClass(v)}">${v}</span>`; }
+        if(f.type==='number'&&v){ v=Number(v).toLocaleString(); }
         h+=`<td>${v}</td>`;
       });
 
@@ -744,14 +583,11 @@ function renderList(){
   $('tableWrap').innerHTML=h;
 }
 
-
 // ═══ TEXT FILTER: SOFT... ═══
 function setFilter(el){
   const eid=curEntity;
 
-  if(!colFilters[eid]){
-    colFilters[eid]={};
-  }
+  if(!colFilters[eid]){ colFilters[eid]={}; }
 
   colFilters[eid][el.dataset.fk]=el.value;
 
@@ -759,43 +595,20 @@ function setFilter(el){
 
   // Giữ focus sau khi render lại bảng
   setTimeout(()=>{
-    const inp=document.querySelector(
-      `[data-fk="${el.dataset.fk}"]`
-    );
-
-    if(inp){
-      inp.focus();
-      inp.selectionStart=inp.value.length;
-    }
-  },0);
-}
-
+    const inp=document.querySelector( `[data-fk="${el.dataset.fk}"]` );
+    if(inp){ inp.focus(); inp.selectionStart=inp.value.length; } },0); }
 
 // ═══ EXCEL-STYLE COLUMN FILTER ═══
-
 const colFilterChecks={};
-
-
-function openColFilter(e,fk){
-  e.stopPropagation();
+function openColFilter(e,fk){ e.stopPropagation();
 
   // Đóng các menu khác
-  document.querySelectorAll('.col-filter-menu.show').forEach(x=>{
-    if(x.id!=='col-filter-'+fk){
-      x.classList.remove('show');
-    }
-  });
-
+  document.querySelectorAll('.col-filter-menu.show').forEach(x=>{ if(x.id!=='col-filter-'+fk){ x.classList.remove('show'); } });
   const menu=document.getElementById('col-filter-'+fk);
-
   if(!menu)return;
 
   // Nếu đang mở thì đóng
-  if(menu.classList.contains('show')){
-    menu.classList.remove('show');
-    return;
-  }
-
+  if(menu.classList.contains('show')){ menu.classList.remove('show'); return; }
   buildColFilter(fk,menu);
 
   // Đặt menu theo vị trí của nút phễu
@@ -892,9 +705,7 @@ function buildColFilter(fk,menu){
 
 function toggleColFilterValue(fk,el){
 
-  if(!colFilterChecks[fk]){
-    colFilterChecks[fk]=[];
-  }
+  if(!colFilterChecks[fk]){ colFilterChecks[fk]=[]; }
 
   if(el.checked){
 
@@ -909,7 +720,6 @@ function toggleColFilterValue(fk,el){
 
   }
 }
-
 
 // ═══ SELECT ALL ═══
 
@@ -978,26 +788,13 @@ function applyColFilter(fk){
   }
 
   // Không chọn gì = bỏ filter
-  if(selected.length===0){
-
-    delete colFilters[curEntity][fk];
-
-  }else{
+  if(selected.length===0){ delete colFilters[curEntity][fk]; }else{
 
     // Lưu dạng multi-select
-    colFilters[curEntity][fk]={
-      type:'multi',
-      values:[...selected]
-    };
-  }
+    colFilters[curEntity][fk]={ type:'multi', values:[...selected] }; }
 
-  const menu=document.getElementById(
-    'col-filter-'+fk
-  );
-
-  if(menu){
-    menu.classList.remove('show');
-  }
+  const menu=document.getElementById( 'col-filter-'+fk );
+  if(menu){ menu.classList.remove('show'); }
 
   // QUAN TRỌNG:
   // renderList() sẽ lọc lại bảng
@@ -1059,6 +856,8 @@ document.addEventListener('click',e=>{
 });
 
 // ═══ FORM ═══
+function getFormSnapshot(){return [...$('formFields').querySelectorAll('[data-key]')].map(el=>el.dataset.key+'='+el.value).join('|');}
+function formHasChanges(){return getFormSnapshot()!==formSnapshot;}
 function openForm(idx){
   editIdx=typeof idx==='number'?idx:-1;
   const eid=curEntity;const e=ENTITIES[eid];
@@ -1095,48 +894,33 @@ function openForm(idx){
     sel.addEventListener('change',()=>{
       const manual=sel.parentElement.querySelector('[data-key="company_name_manual"]');
       if(manual)manual.style.display=sel.value==='__other'?'':'none'})});
-  $('modalBg').classList.add('show')}
+  $('modalBg').classList.add('show');formSnapshot=getFormSnapshot();}
 
-function closeForm(){$('modalBg').classList.remove('show');editIdx=-1}
+function closeForm(){$('modalBg').classList.remove('show');editIdx=-1;formSnapshot='';}
+async function cancelForm(){if(!formHasChanges()){closeForm();return}const choice=confirm('You have unsaved changes.\n\n'+'Press OK to SAVE before leaving.\n'+'Press Cancel to continue editing.');if(choice){await saveForm()}else{const discard=confirm('Discard all unsaved changes and leave this form?');if(discard){closeForm()}}}
 
-function saveForm(){
-  const eid=curEntity;const e=ENTITIES[eid];
-  if(!data[eid])data[eid]=[];
-
-  const record=editIdx>=0?{...data[eid][editIdx]}:{};
-
-  // Read form values
-  $('formFields').querySelectorAll('[data-key]').forEach(el=>{
-    if(el.dataset.key.endsWith('_manual'))return;
-    let v=el.value.trim();
-    if(el.dataset.key==='company_name'&&v==='__other'){
-      const manual=$('formFields').querySelector('[data-key="company_name_manual"]');
-      v=manual?manual.value.trim():''}
-    record[el.dataset.key]=v});
-
-  // Auto-generate ID for new records
-  if(editIdx<0){
-    const idField=e.fields.find(f=>f.auto);
-    if(idField)record[idField.k]=genId()}
-
-  // Compute full_name for contacts
+async function saveForm(){
+  const eid=curEntity;const e=ENTITIES[eid];if(!data[eid])data[eid]=[];const wasEdit=editIdx>=0;
+  const record=wasEdit?{...data[eid][editIdx]}:{};
+  $('formFields').querySelectorAll('[data-key]').forEach(el=>{if(el.dataset.key.endsWith('_manual'))return;let v=el.value.trim();if(el.dataset.key==='company_name'&&v==='__other'){const manual=$('formFields').querySelector('[data-key="company_name_manual"]');v=manual?manual.value.trim():''}record[el.dataset.key]=v});
+  if(!record._row_id)record._row_id=genId();
+  if(!wasEdit){const idField=e.fields.find(f=>f.auto);if(idField)record[idField.k]=genId()}
   if(eid==='contacts')record.full_name=(record.first_name||'')+' '+(record.last_name||'');
+  const missing=e.fields.filter(f=>f.required&&!record[f.k]);if(missing.length){toast('⚠ Missing: '+missing.map(f=>f.l).join(', '));return false}
+  if(!_cloudOK||!_pullDone){toast('⚠ Supabase is not ready. Data was NOT saved.');return false}
+  if(!_historyOK&&!(await checkHistoryReady())){toast('⚠ History archive is not ready. Data was NOT saved. Run the Record History SQL first.');$('syncBadge').textContent='🟠 History not ready';$('syncBadge').style.color='var(--org)';return false}
+  const nextArr=(data[eid]||[]).map(x=>({...x}));if(wasEdit)nextArr[editIdx]=record;else nextArr.push(record);
+  $('syncBadge').textContent='🔄 Saving...';$('syncBadge').style.color='var(--blu)';
+  const ok=await pushEntityData(eid,nextArr);if(!ok){$('syncBadge').textContent='🔴 Save failed';$('syncBadge').style.color='var(--pnk)';toast('⚠ Supabase save failed — form kept open');return false}
+  data[eid]=nextArr;saveLocal();closeForm();renderAll();$('syncBadge').textContent='🟢 Saved';$('syncBadge').style.color='var(--grn)';toast(wasEdit?'✓ Updated + archived':'✓ Added + archived');return true}
 
-  // Validate required
-  const missing=e.fields.filter(f=>f.required&&!record[f.k]);
-  if(missing.length){toast('⚠ Missing: '+missing.map(f=>f.l).join(', '));return}
-
-  // Save
-  if(editIdx>=0){data[eid][editIdx]=record}
-  else{data[eid].push(record)}
-
-  saveLocal();closeForm();renderAll();
-  toast(editIdx>=0?'✓ Already updated':'✓ Added new')}
-
-function deleteRecord(){
-  if(!confirm('Delete this record?'))return;
-  const eid=curEntity;
-  if(editIdx>=0&&data[eid]){data[eid].splice(editIdx,1);saveLocal();closeForm();renderAll();toast('✓ Deleted')}}
+async function deleteRecord(){
+  if(!confirm('Delete this record from the dashboard? History will remain in Supabase.'))return false;
+  const eid=curEntity;if(editIdx<0||!data[eid])return false;if(!_cloudOK||!_pullDone){toast('⚠ Supabase is not ready. Nothing was deleted.');return false}
+  if(!_historyOK&&!(await checkHistoryReady())){toast('⚠ History archive is not ready. Nothing was deleted. Run the Record History SQL first.');$('syncBadge').textContent='🟠 History not ready';$('syncBadge').style.color='var(--org)';return false}
+  const nextArr=(data[eid]||[]).filter((_,i)=>i!==editIdx);$('syncBadge').textContent='🔄 Saving...';$('syncBadge').style.color='var(--blu)';
+  const ok=await pushEntityData(eid,nextArr);if(!ok){$('syncBadge').textContent='🔴 Delete failed';$('syncBadge').style.color='var(--pnk)';toast('⚠ Supabase delete failed — record kept');return false}
+  data[eid]=nextArr;saveLocal();closeForm();renderAll();$('syncBadge').textContent='🟢 Saved';$('syncBadge').style.color='var(--grn)';toast('✓ Deleted from dashboard — archived copy preserved');return true}
 
 // ═══ EXPORT CSV ═══
 function exportAll(){
@@ -1148,6 +932,28 @@ function exportAll(){
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'}));
   a.download=`CRM_${eid}_${new Date().toISOString().slice(0,10)}.csv`;a.click();toast('✓ CSV exported')}
 
+const csvCell=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+async function exportHistory(){
+  if(!_cloudOK){toast('⚠ Supabase unconfigured');return false}
+  const eid=curEntity;const e=ENTITIES[eid];$('syncBadge').textContent='🔄 Exporting history...';$('syncBadge').style.color='var(--blu)';
+  try{
+    const all=[];const pageSize=1000;let start=0;
+    while(true){
+      const url=SUPABASE_URL+'/rest/v1/crm_history_records?select=history_id,entity,record_id,action,created_at,snapshot&entity=eq.'+encodeURIComponent(eid)+'&order=history_id.asc';
+      const r=await fetch(url,{headers:{..._sbH,'Range-Unit':'items','Range':start+'-'+(start+pageSize-1)}});
+      if(!r.ok){console.error('History export error:',await r.text());toast('⚠ History export failed — run the Record History SQL first');$('syncBadge').textContent='🔴 History error';$('syncBadge').style.color='var(--pnk)';return false}
+      const chunk=await r.json();all.push(...chunk);if(chunk.length<pageSize)break;start+=pageSize;
+    }
+    if(!all.length){toast('No history found for '+e.label);$('syncBadge').textContent='🟢 Loaded';$('syncBadge').style.color='var(--grn)';return true}
+    const fieldKeys=e.fields.map(f=>f.k);const extraKeys=[...new Set(all.flatMap(h=>Object.keys(h.snapshot||{})))].filter(k=>k!=='_row_id'&&!fieldKeys.includes(k));
+    const cols=[...e.fields.map(f=>({k:f.k,l:f.l})),...extraKeys.map(k=>({k,l:k}))];
+    const header=['HISTORY ID','ENTITY','RECORD ID','ACTION','SAVED AT',...cols.map(c=>c.l),'SNAPSHOT JSON'];
+    const lines=[header.map(csvCell).join(',')];
+    all.forEach(h=>{const snap=h.snapshot||{};lines.push([h.history_id,h.entity,h.record_id,h.action,h.created_at,...cols.map(c=>snap[c.k]??''),JSON.stringify(snap)].map(csvCell).join(','))});
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+lines.join('\n')],{type:'text/csv;charset=utf-8;'}));a.download=`CRM_HISTORY_${eid}_${new Date().toISOString().slice(0,10)}.csv`;a.click();
+    $('syncBadge').textContent='🟢 History exported';$('syncBadge').style.color='var(--grn)';toast('✓ Exported '+all.length+' history versions');return true
+  }catch(e){console.error(e);$('syncBadge').textContent='🔴 History error';$('syncBadge').style.color='var(--pnk)';toast('⚠ History export failed');return false}}
+
 // ═══ INIT ═══
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){autoPush()}});
 window.addEventListener('beforeunload',()=>{autoPush()});
@@ -1156,7 +962,7 @@ window.addEventListener('pagehide',()=>{autoPush()});
 document.addEventListener('DOMContentLoaded',async()=>{
   data=loadLocal();
   ENTITY_KEYS.forEach(k=>{if(!data[k])data[k]=[]});
-  if(_cloudOK)await syncPull();
+  if(_cloudOK){await syncPull();const historyReady=await checkHistoryReady();if(historyReady){$('syncBadge').textContent='🟢 Loaded · Archive ready';$('syncBadge').style.color='var(--grn)'}else{$('syncBadge').textContent='🟠 History not ready';$('syncBadge').style.color='var(--org)'}}
   renderAll();
   if(!_cloudOK){$('syncBadge').textContent='⚪ Offline'}
 });
