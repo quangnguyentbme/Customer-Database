@@ -456,12 +456,12 @@ function renderList(){
 
   // Global search
   if(q){
-    items=items.filter(item=>
-      e.searchKeys.some(k=>
-        String(item[k]||'').toLowerCase().includes(q)
-      )
-    );
-  }
+  items=items.filter(item=>
+    Object.values(item).some(v=>
+      String(v||'').toLowerCase().includes(q)
+    )
+  );
+}
 
   const hid=hiddenCols[eid]||[];
   const cols=e.fields.filter(f=>f.listCol&&!hid.includes(f.k));
