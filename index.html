@@ -928,6 +928,45 @@ async function saveForm(){
   const missing=e.fields.filter(f=>f.required&&!record[f.k]);if(missing.length){toast('⚠ Missing: '+missing.map(f=>f.l).join(', '));return false}
   if(!_cloudOK||!_pullDone){toast('⚠ Supabase is not ready. Data was NOT saved.');return false}
   if(!_historyOK&&!(await checkHistoryReady())){toast('⚠ History archive is not ready. Data was NOT saved. Run the Record History SQL first.');$('syncBadge').textContent='🟠 History not ready';$('syncBadge').style.color='var(--org)';return false}
+  // ═══ CONTACT → AUTO CREATE COMPANY ═══
+if(eid==='contacts' && record.company_name){
+
+  const companyName=record.company_name.trim();
+
+  const companyExists=(data.companies||[]).some(c=>
+    String(c.company_full_name||'')
+      .trim()
+      .toLowerCase()===
+    companyName.toLowerCase()
+  );
+
+  // Nếu chưa có trong Companies → tự tạo
+  if(!companyExists){
+
+    const newCompany={
+      _row_id:genId(),
+      company_id:genId(),
+      company_full_name:companyName
+    };
+
+    const nextCompanies=[
+      ...(data.companies||[]).map(x=>({...x})),
+      newCompany
+    ];
+
+    const companyOK=await pushEntityData(
+      'companies',
+      nextCompanies
+    );
+
+    if(!companyOK){
+      toast('⚠ Không thể tạo Company. Contact chưa được lưu.');
+      return false;
+    }
+
+    data.companies=nextCompanies;
+  }
+}
   const nextArr=(data[eid]||[]).map(x=>({...x}));if(wasEdit)nextArr[editIdx]=record;else nextArr.push(record);
   $('syncBadge').textContent='🔄 Saving...';$('syncBadge').style.color='var(--blu)';
   const ok=await pushEntityData(eid,nextArr);if(!ok){$('syncBadge').textContent='🔴 Save failed';$('syncBadge').style.color='var(--pnk)';toast('⚠ Supabase save failed — form kept open');return false}
