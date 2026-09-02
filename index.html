@@ -11,7 +11,6 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Calibri',Arial,sans-serif;background:var(--bg);color:var(--t);-webkit-font-smoothing:antialiased;font-size:13px}
 select,select option,input,textarea{ text-transform:uppercase}
-table td{text-transform:uppercase}
 .app{max-width:1500px;margin:0 auto;padding:24px 20px 80px}
 .hdr{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-bottom:20px}
 .hdr h1{font-size:32px;font-weight:600;letter-spacing:-1px}
@@ -75,6 +74,102 @@ table.dt tr{cursor:pointer}
 .filter-input:focus{border-color:var(--blu)}
 @media(max-width:900px){.sts{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.sts{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.app{padding:16px 10px 60px}}
+.dt th{
+  position:relative;
+}
+
+.col-filter-menu{
+  display:none;
+  position:fixed;
+  z-index:99999;
+  width:230px;
+  background:#fff;
+  border:1px solid #d2d2d7;
+  border-radius:10px;
+  box-shadow:0 6px 24px rgba(0,0,0,.16);
+  padding:10px;
+  text-align:left;
+  font-weight:400;
+}
+
+.col-filter-menu.show{
+  display:block;
+}
+
+.col-filter-search{
+  width:100%;
+  border:1px solid #d2d2d7;
+  border-radius:6px;
+  padding:6px 8px;
+  font-family:inherit;
+  font-size:11px;
+  margin-bottom:8px;
+}
+
+.col-filter-actions{
+  display:flex;
+  gap:5px;
+  margin-bottom:7px;
+  padding-bottom:7px;
+  border-bottom:1px solid #e8e8ed;
+}
+
+.col-filter-actions button,
+.col-filter-footer button{
+  border:0;
+  border-radius:6px;
+  padding:5px 8px;
+  font-family:inherit;
+  font-size:10px;
+  cursor:pointer;
+}
+
+.col-filter-options{
+  max-height:180px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding-right:3px;
+}
+
+.col-filter-option{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:5px 3px;
+  font-size:11px;
+  cursor:pointer;
+  text-transform:uppercase;
+}
+
+.col-filter-option:hover{
+  background:#f5f5f7;
+}
+
+.col-filter-option input{
+  margin:0;
+}
+
+.col-filter-footer{
+  display:flex;
+  justify-content:flex-end;
+  gap:5px;
+  margin-top:7px;
+  padding-top:7px;
+  border-top:1px solid #e8e8ed;
+  background:#fff;
+}
+
+.col-filter-clear{
+  background:#f5f5f7;
+  color:#6e6e73;
+}
+
+.col-filter-apply{
+  background:#007aff;
+  color:#fff;
+}
+.filter-funnel{border:none;background:transparent;outline:none;box-shadow:none}
+.filter-funnel.active{color:var(--blu);font-weight:700}
 </style>
 </head>
 <body>
@@ -83,7 +178,7 @@ table.dt tr{cursor:pointer}
 <div class="hdr">
   <div><h1>Sales Database</h1><p>Airlines & Hospitality · <span id="syncBadge" style="font-size:11px;font-weight:500;color:var(--t3)"></span></p></div>
   <div class="hdr-act">
-    <button class="btn btn-b" onclick="syncPush()">☁ Đồng bộ</button>
+    <button class="btn btn-b" onclick="syncPush()">☁ Sync</button>
     <button class="btn btn-o" onclick="exportAll()">↓ CSV</button>
   </div>
 </div>
@@ -93,11 +188,11 @@ table.dt tr{cursor:pointer}
 
 <div id="listView">
   <div class="search-bar">
-    <input class="search-input" id="searchBox" type="text" placeholder="Tìm kiếm..." oninput="renderList()">
-    <button class="btn" style="background:var(--bg);color:var(--t2)" onclick="toggleColPanel()">⚙ Cột</button>
-    <button class="btn btn-b" onclick="openForm()">+ Thêm mới</button>
+    <input class="search-input" id="searchBox" type="text" placeholder="SEARCH..." oninput="renderList()">
+    <button class="btn" style="background:var(--bg);color:var(--t2)" onclick="toggleColPanel()">⚙ Columns</button>
+    <button class="btn btn-b" onclick="openForm()">+ Add New</button>
   </div>
-  <div id="colPanel" style="display:none" class="cd"><div class="cd-t">SELECT cột hiển thị</div><div class="col-toggle" id="colToggle"></div></div>
+  <div id="colPanel" style="display:none" class="cd"><div class="cd-t">SELECT columns to display</div><div class="col-toggle" id="colToggle"></div></div>
 <div class="cd"><div class="tbl-wrap" id="tableWrap"></div></div>
 </div>
 
@@ -105,12 +200,12 @@ table.dt tr{cursor:pointer}
 
 <div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeForm()">
   <div class="modal" id="modal">
-    <h2 id="formTitle">Thêm mới</h2>
+    <h2 id="formTitle">Add New</h2>
     <div class="form-grid" id="formFields"></div>
     <div class="form-actions">
-      <button class="btn btn-p" id="btnDel" style="margin-right:auto;display:none" onclick="deleteRecord()">Xoá</button>
-      <button class="btn" style="background:var(--bg);color:var(--t2)" onclick="closeForm()">Huỷ</button>
-      <button class="btn btn-b" onclick="saveForm()">Lưu</button>
+      <button class="btn btn-p" id="btnDel" style="margin-right:auto;display:none" onclick="deleteRecord()">Delete</button>
+      <button class="btn" style="background:var(--bg);color:var(--t2)" onclick="closeForm()">Cancel</button>
+      <button class="btn btn-b" onclick="saveForm()">Save</button>
     </div>
   </div>
 </div>
@@ -134,7 +229,7 @@ const ENTITIES={
       {k:'tax_code',l:'Tax Code',type:'text'},
       {k:'tax_address',l:'Tax Address',type:'text'},
       {k:'authorized_person',l:'Authorized Person',type:'text'},
-      {k:'company_type',l:'Company Type',type:'select',opts:['Travel Agent','Tour Operator','OTA','TMC','Airline','Hotel','DMC','MICE','Consolidator','Corporate','GSA','Other'],listCol:true},
+      {k:'company_type',l:'Company Type',type:'select',opts:['TRAVEL AGENT','TOUR OPERATOR','OTA','TMC','AIRLINE','HOTEL','DMC','MICE','CONSOLIDATOR','CORPORATE','GSA','OTHER'],listCol:true},
       {k:'business_model',l:'Business Model',type:'select',opts:['B2B','B2C','B2B2C','Marketplace','Distributor','Manufacturer','Retailer','Service Provider','Other'],listCol:true},
       {k:'industry',l:'Industry',type:'select',opts:['Airlines','Hospitality','Travel','MICE','Corporate','Cruise','Other']},
       {k:'country',l:'Country',type:'select',opts:[
@@ -405,16 +500,16 @@ function saveLocal(){try{localStorage.setItem(LS_KEY,JSON.stringify(data))}catch
 let _pullDone=false;
 
 async function syncPull(){
-  if(!_cloudOK){toast('⚠ Chưa cấu hình Supabase');return}
-  $('syncBadge').textContent='🔄 Đang tải...';$('syncBadge').style.color='var(--blu)';
+  if(!_cloudOK){toast('⚠ Supabase unconfigured');return}
+  $('syncBadge').textContent='🔄 Loading...';$('syncBadge').style.color='var(--blu)';
   try{const res=await fetch(SUPABASE_URL+'/rest/v1/crm_data?select=id,data',{headers:_sbH});
-    if(!res.ok){$('syncBadge').textContent='🔴 Lỗi';$('syncBadge').style.color='var(--pnk)';return}
+    if(!res.ok){$('syncBadge').textContent='🔴 Error';$('syncBadge').style.color='var(--pnk)';return}
     const rows=await res.json();
     // Cloud is master — always load cloud data
     rows.forEach(r=>{if(r.data&&Array.isArray(r.data)&&r.data.length>0){data[r.id]=r.data}});
     _pullDone=true;
     saveLocal();renderAll();
-    $('syncBadge').textContent='🟢 Đã đồng bộ';$('syncBadge').style.color='var(--grn)'
+    $('syncBadge').textContent='🟢 Loaded';$('syncBadge').style.color='var(--grn)'
   }catch(e){$('syncBadge').textContent='🔴 Offline';$('syncBadge').style.color='var(--pnk)';console.error(e)}}
 
 function autoPush(){
@@ -431,8 +526,8 @@ function autoPush(){
         headers:_sbH,body:JSON.stringify({data:arr,updated_at:new Date().toISOString()})})}catch(e){console.error(e)}}})}
 
 async function syncPush(){
-  if(!_cloudOK){toast('⚠ Chưa cấu hình');return}
-  toast('🔄 Đang đồng bộ...');
+  if(!_cloudOK){toast('⚠ Supabase unconfigured');return}
+  toast('🔄 Loading...');
   try{
     // Pull first — merge: cloud fills gaps, local wins
     const res=await fetch(SUPABASE_URL+'/rest/v1/crm_data?select=id,data',{headers:_sbH});
@@ -449,9 +544,9 @@ async function syncPush(){
         headers:_sbH,body:JSON.stringify({data:arr,updated_at:new Date().toISOString()})});
       if(r.ok)ok++}
     _pullDone=true;
-    $('syncBadge').textContent='🟢 Đã đồng bộ';$('syncBadge').style.color='var(--grn)';
-    toast('✓ Đã đồng bộ '+ok+' bảng')
-  }catch(e){toast('⚠ Lỗi');console.error(e)}}
+    $('syncBadge').textContent='🟢 Loaded';$('syncBadge').style.color='var(--grn)';
+    toast('✓ Loaded '+ok+' tables')
+  }catch(e){toast('⚠ Error');console.error(e)}}
 
 // ═══ RENDER ═══
 function renderAll(){renderStats();renderTabs();renderList()}
@@ -504,53 +599,463 @@ function toggleCol(k){
   renderColToggle();renderList()}
 
 function renderList(){
-  const eid=curEntity;const e=ENTITIES[eid];
+  const eid=curEntity;
+  const e=ENTITIES[eid];
   const q=($('searchBox').value||'').toLowerCase();
   let items=(data[eid]||[]).slice();
 
-  if(q){items=items.filter(item=>e.searchKeys.some(k=>(item[k]||'').toLowerCase().includes(q)))}
+  // Global search
+  if(q){
+    items=items.filter(item=>
+      e.searchKeys.some(k=>
+        String(item[k]||'').toLowerCase().includes(q)
+      )
+    );
+  }
 
   const hid=hiddenCols[eid]||[];
   const cols=e.fields.filter(f=>f.listCol&&!hid.includes(f.k));
 
-  // Apply column filters
+  // ═══ APPLY COLUMN FILTERS ═══
   const cf=colFilters[eid]||{};
+
   Object.entries(cf).forEach(([k,v])=>{
-    if(v)items=items.filter(item=>{
+    if(!v)return;
+
+    items=items.filter(item=>{
       let val=item[k]||'';
-      if(k==='full_name')val=(item.first_name||'')+' '+(item.last_name||'');
-      return String(val).toLowerCase().includes(v.toLowerCase())})});
+
+      if(k==='full_name'){
+        val=(item.first_name||'')+' '+(item.last_name||'');
+      }
+
+      // Filter bằng PHỄU - chọn nhiều giá trị
+      if(typeof v==='object' && v.type==='multi'){
+        if(!v.values || v.values.length===0)return true;
+
+        return v.values.some(x=>
+          String(val).trim().toLowerCase()===
+          String(x).trim().toLowerCase()
+        );
+      }
+
+      // Filter bằng ô SOFT...
+      return String(val)
+        .toLowerCase()
+        .includes(String(v).toLowerCase());
+    });
+  });
 
   items.reverse();
 
+  // ═══ TABLE HEADER ═══
   let h='<table class="dt"><thead><tr><th>#</th>';
+
   cols.forEach(f=>{
-    const fv=(cf[f.k]||'');
-    h+=`<th>${f.l}<br><input class="filter-input" data-fk="${f.k}" value="${fv}" placeholder="Lọc..." oninput="setFilter(this)"></th>`});
+    const filterValue=cf[f.k];
+
+    // Chỉ hiển thị text filter nếu filter là dạng text
+    const fv=
+      typeof filterValue==='string'
+        ? filterValue
+        : '';
+
+    // Kiểm tra cột đang có filter phễu hay không
+    const hasMultiFilter=
+      typeof filterValue==='object' &&
+      filterValue.type==='multi' &&
+      filterValue.values &&
+      filterValue.values.length>0;
+
+    h+=`<th>
+      <div class="th-filter-head">
+        <span>${f.l}</span>
+
+        <button
+          type="button"
+          class="filter-funnel ${hasMultiFilter?'active':''}"
+          data-fk="${f.k}"
+          onclick="openColFilter(event,'${f.k}')"
+        >⋮</button>
+      </div>
+
+      <input
+        class="filter-input"
+        data-fk="${f.k}"
+        value="${escapeHtml(fv)}"
+        placeholder="SOFT..."
+        oninput="setFilter(this)"
+      >
+
+      <div
+        class="col-filter-menu"
+        id="col-filter-${f.k}"
+        onclick="event.stopPropagation()"
+      ></div>
+    </th>`;
+  });
+
   h+='</tr></thead><tbody>';
 
-  if(items.length===0){h+=`<tr><td colspan="${cols.length+1}" style="text-align:center;padding:40px;color:var(--t3)">Không có dữ liệu</td></tr>`}
-  else{items.forEach((item,idx)=>{
-    const realIdx=(data[eid]||[]).indexOf(item);
-    h+=`<tr onclick="openForm(${realIdx})"><td style="color:var(--t3)">${items.length-idx}</td>`;
-    cols.forEach(f=>{
-      let v=item[f.k]||'';
-      if(f.computed&&f.k==='full_name')v=(item.first_name||'')+' '+(item.last_name||'');
-      if(f.badge&&v)v=`<span class="badge badge-${badgeClass(v)}">${v}</span>`;
-      if(f.type==='number'&&v)v=Number(v).toLocaleString();
-      h+=`<td>${v}</td>`});
-    h+='</tr>'})}
+  // ═══ TABLE BODY ═══
+  if(items.length===0){
+    h+=`<tr>
+      <td colspan="${cols.length+1}"
+        style="text-align:center;padding:40px;color:var(--t3)">
+        Không có dữ liệu
+      </td>
+    </tr>`;
+  }
+  else{
+    items.forEach((item,idx)=>{
+      const realIdx=(data[eid]||[]).indexOf(item);
 
-  h+=`</tbody></table><div style="font-size:10px;color:var(--t3);margin-top:8px">${items.length} kết quả</div>`;
-  $('tableWrap').innerHTML=h}
+      h+=`<tr onclick="openForm(${realIdx})">
+        <td style="color:var(--t3)">${items.length-idx}</td>`;
 
+      cols.forEach(f=>{
+        let v=item[f.k]||'';
+
+        if(f.computed&&f.k==='full_name'){
+          v=(item.first_name||'')+' '+(item.last_name||'');
+        }
+
+        if(f.badge&&v){
+          v=`<span class="badge badge-${badgeClass(v)}">${v}</span>`;
+        }
+
+        if(f.type==='number'&&v){
+          v=Number(v).toLocaleString();
+        }
+
+        h+=`<td>${v}</td>`;
+      });
+
+      h+='</tr>';
+    });
+  }
+
+  h+=`</tbody></table>
+    <div style="font-size:10px;color:var(--t3);margin-top:8px">
+      ${items.length} results
+    </div>`;
+
+  $('tableWrap').innerHTML=h;
+}
+
+
+// ═══ TEXT FILTER: SOFT... ═══
 function setFilter(el){
   const eid=curEntity;
-  if(!colFilters[eid])colFilters[eid]={};
+
+  if(!colFilters[eid]){
+    colFilters[eid]={};
+  }
+
   colFilters[eid][el.dataset.fk]=el.value;
+
   renderList();
-  // Keep focus on filter input after re-render
-  setTimeout(()=>{const inp=document.querySelector(`[data-fk="${el.dataset.fk}"]`);if(inp){inp.focus();inp.selectionStart=inp.value.length}},0)}
+
+  // Giữ focus sau khi render lại bảng
+  setTimeout(()=>{
+    const inp=document.querySelector(
+      `[data-fk="${el.dataset.fk}"]`
+    );
+
+    if(inp){
+      inp.focus();
+      inp.selectionStart=inp.value.length;
+    }
+  },0);
+}
+
+
+// ═══ EXCEL-STYLE COLUMN FILTER ═══
+
+const colFilterChecks={};
+
+
+function openColFilter(e,fk){
+  e.stopPropagation();
+
+  // Đóng các menu khác
+  document.querySelectorAll('.col-filter-menu.show').forEach(x=>{
+    if(x.id!=='col-filter-'+fk){
+      x.classList.remove('show');
+    }
+  });
+
+  const menu=document.getElementById('col-filter-'+fk);
+
+  if(!menu)return;
+
+  // Nếu đang mở thì đóng
+  if(menu.classList.contains('show')){
+    menu.classList.remove('show');
+    return;
+  }
+
+  buildColFilter(fk,menu);
+
+  // Đặt menu theo vị trí của nút phễu
+  const btn=e.currentTarget;
+  const rect=btn.getBoundingClientRect();
+
+  menu.style.top=(rect.bottom+4)+'px';
+  menu.style.left=rect.left+'px';
+
+  menu.classList.add('show');
+}
+
+
+function buildColFilter(fk,menu){
+
+  const items=data[curEntity]||[];
+
+  // Lấy toàn bộ giá trị duy nhất của cột
+  const values=[...new Set(
+    items
+      .map(item=>{
+        let v=item[fk]||'';
+
+        if(fk==='full_name'){
+          v=(item.first_name||'')+' '+(item.last_name||'');
+        }
+
+        return String(v).trim();
+      })
+      .filter(v=>v!=='')
+  )].sort((a,b)=>a.localeCompare(b));
+
+  // Nếu trước đó đã chọn thì giữ lại
+  const selected=colFilterChecks[fk]||[];
+
+  menu.innerHTML=`
+    <input
+      class="col-filter-search"
+      placeholder="SEARCH..."
+      oninput="searchColFilter(this,'${fk}')"
+    >
+
+    <div class="col-filter-actions">
+      <button
+        type="button"
+        onclick="selectAllColFilter('${fk}')"
+      >SELECT ALL</button>
+
+      <button
+        type="button"
+        onclick="clearColFilter('${fk}')"
+      >CLEAR</button>
+    </div>
+
+    <div
+      class="col-filter-options"
+      id="col-options-${fk}"
+    >
+      ${values.map(v=>`
+        <label
+          class="col-filter-option"
+          data-value="${escapeHtml(v.toLowerCase())}"
+        >
+          <input
+            type="checkbox"
+            value="${escapeHtml(v)}"
+            ${selected.includes(v)?'checked':''}
+            onchange="toggleColFilterValue('${fk}',this)"
+          >
+
+          <span>${escapeHtml(v)}</span>
+        </label>
+      `).join('')}
+    </div>
+
+    <div class="col-filter-footer">
+      <button
+        type="button"
+        class="col-filter-clear"
+        onclick="clearColFilter('${fk}')"
+      >CLEAR</button>
+
+      <button
+        type="button"
+        class="col-filter-apply"
+        onclick="applyColFilter('${fk}')"
+      >APPLY</button>
+    </div>
+  `;
+}
+
+
+// ═══ CHECK / UNCHECK ═══
+
+function toggleColFilterValue(fk,el){
+
+  if(!colFilterChecks[fk]){
+    colFilterChecks[fk]=[];
+  }
+
+  if(el.checked){
+
+    if(!colFilterChecks[fk].includes(el.value)){
+      colFilterChecks[fk].push(el.value);
+    }
+
+  }else{
+
+    colFilterChecks[fk]=
+      colFilterChecks[fk].filter(v=>v!==el.value);
+
+  }
+}
+
+
+// ═══ SELECT ALL ═══
+
+function selectAllColFilter(fk){
+
+  const menu=document.getElementById(
+    'col-filter-'+fk
+  );
+
+  if(!menu)return;
+
+  const checks=
+    menu.querySelectorAll(
+      'input[type="checkbox"]'
+    );
+
+  colFilterChecks[fk]=[];
+
+  checks.forEach(c=>{
+    c.checked=true;
+
+    colFilterChecks[fk].push(c.value);
+  });
+}
+
+
+// ═══ CLEAR ═══
+
+function clearColFilter(fk){
+
+  colFilterChecks[fk]=[];
+
+  if(!colFilters[curEntity]){
+    colFilters[curEntity]={};
+  }
+
+  delete colFilters[curEntity][fk];
+
+  const menu=document.getElementById(
+    'col-filter-'+fk
+  );
+
+  if(menu){
+    menu
+      .querySelectorAll('input[type="checkbox"]')
+      .forEach(c=>{
+        c.checked=false;
+      });
+
+    menu.classList.remove('show');
+  }
+
+  renderList();
+}
+
+
+// ═══ APPLY PHỄU ═══
+
+function applyColFilter(fk){
+
+  const selected=
+    colFilterChecks[fk]||[];
+
+  if(!colFilters[curEntity]){
+    colFilters[curEntity]={};
+  }
+
+  // Không chọn gì = bỏ filter
+  if(selected.length===0){
+
+    delete colFilters[curEntity][fk];
+
+  }else{
+
+    // Lưu dạng multi-select
+    colFilters[curEntity][fk]={
+      type:'multi',
+      values:[...selected]
+    };
+  }
+
+  const menu=document.getElementById(
+    'col-filter-'+fk
+  );
+
+  if(menu){
+    menu.classList.remove('show');
+  }
+
+  // QUAN TRỌNG:
+  // renderList() sẽ lọc lại bảng
+  // và ẩn những dòng không được chọn
+  renderList();
+}
+
+
+// ═══ SEARCH TRONG PHỄU ═══
+
+function searchColFilter(input,fk){
+
+  const q=input.value.toLowerCase();
+
+  document.querySelectorAll(
+    '#col-options-'+fk+
+    ' .col-filter-option'
+  ).forEach(el=>{
+
+    el.style.display=
+      el.dataset.value.includes(q)
+        ? 'flex'
+        : 'none';
+
+  });
+}
+
+
+// ═══ ESCAPE HTML ═══
+
+function escapeHtml(v){
+
+  return String(v)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+
+}
+
+// ═══ CLICK RA NGOÀI → ĐÓNG PHỄU ═══
+
+document.addEventListener('click',e=>{
+
+  if(
+    !e.target.closest('.col-filter-menu') &&
+    !e.target.closest('.filter-funnel')
+  ){
+
+    document
+      .querySelectorAll('.col-filter-menu.show')
+      .forEach(x=>{
+        x.classList.remove('show');
+      });
+
+  }
+
+});
 
 // ═══ FORM ═══
 function openForm(idx){
@@ -558,7 +1063,7 @@ function openForm(idx){
   const eid=curEntity;const e=ENTITIES[eid];
   const item=editIdx>=0?(data[eid]||[])[editIdx]:{};
 
-  $('formTitle').textContent=editIdx>=0?'Sửa '+e.label.slice(0,-1):'Thêm '+e.label.slice(0,-1)+' mới';
+  $('formTitle').textContent=editIdx>=0?'Edit '+e.label.slice(0,-1):'DATA INPUT';
   $('btnDel').style.display=editIdx>=0?'':'none';
 
   let h='';
@@ -572,8 +1077,8 @@ function openForm(idx){
       const companies=(data.companies||[]).map(c=>c.company_name).filter(Boolean).sort();
       h+=`<select data-key="${f.k}"><option value="">-- SELECT Company --</option>`;
       companies.forEach(c=>{h+=`<option value="${c}"${val===c?' selected':''}>${c}</option>`});
-      h+=`<option value="__other">+ Nhập thủ công</option></select>`;
-      h+=`<input type="text" data-key="${f.k}_manual" placeholder="Nhập tên mới..." style="display:none;margin-top:4px">`;
+      h+=`<option value="__other">+ Enter manually</option></select>`;
+      h+=`<input type="text" data-key="${f.k}_manual" placeholder="Enter new name..." style="display:none;margin-top:4px">`;
       h+=`</div>`;return}
     if(f.type==='select'){
       h+=`<select data-key="${f.k}"><option value="">-- SELECT --</option>`;
@@ -584,7 +1089,7 @@ function openForm(idx){
     h+=`</div>`});
 
   $('formFields').innerHTML=h;
-    // Show manual input when "Nhập thủ công" selected
+    // Show manual input when "Enter manually" selected
   $('formFields').querySelectorAll('select[data-key="company_name"]').forEach(sel=>{
     sel.addEventListener('change',()=>{
       const manual=sel.parentElement.querySelector('[data-key="company_name_manual"]');
@@ -618,29 +1123,29 @@ function saveForm(){
 
   // Validate required
   const missing=e.fields.filter(f=>f.required&&!record[f.k]);
-  if(missing.length){toast('⚠ Thiếu: '+missing.map(f=>f.l).join(', '));return}
+  if(missing.length){toast('⚠ Missing: '+missing.map(f=>f.l).join(', '));return}
 
   // Save
   if(editIdx>=0){data[eid][editIdx]=record}
   else{data[eid].push(record)}
 
   saveLocal();closeForm();renderAll();
-  toast(editIdx>=0?'✓ Đã cập nhật':'✓ Đã thêm mới')}
+  toast(editIdx>=0?'✓ Already updated':'✓ Added new')}
 
 function deleteRecord(){
-  if(!confirm('Xoá bản ghi này?'))return;
+  if(!confirm('Delete this record?'))return;
   const eid=curEntity;
-  if(editIdx>=0&&data[eid]){data[eid].splice(editIdx,1);saveLocal();closeForm();renderAll();toast('✓ Đã xoá')}}
+  if(editIdx>=0&&data[eid]){data[eid].splice(editIdx,1);saveLocal();closeForm();renderAll();toast('✓ Deleted')}}
 
 // ═══ EXPORT CSV ═══
 function exportAll(){
   const eid=curEntity;const e=ENTITIES[eid];
-  const items=data[eid]||[];if(!items.length){toast('Không có data');return}
+  const items=data[eid]||[];if(!items.length){toast('No data to export');return}
   const cols=e.fields.filter(f=>!f.computed);
   const hdr=cols.map(f=>f.l).join(',');
   const rows=[hdr,...items.map(item=>cols.map(f=>{let v=item[f.k]||'';v=String(v).toUpperCase().replace(/"/g,'""');return v.includes(',')?`"${v}"`:v}).join(','))];
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'}));
-  a.download=`CRM_${eid}_${new Date().toISOString().slice(0,10)}.csv`;a.click();toast('✓ Đã xuất CSV')}
+  a.download=`CRM_${eid}_${new Date().toISOString().slice(0,10)}.csv`;a.click();toast('✓ CSV exported')}
 
 // ═══ INIT ═══
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){autoPush()}});
