@@ -874,12 +874,31 @@ function openForm(idx){
     const cls=f.type==='textarea'?'full':'';
     h+=`<div class="form-group ${cls}"><label>${f.l}${f.required?' *':''}</label>`;
     if(f.k==='company_name'&&f.type==='text'){
-      const companies=(data.companies||[]).map(c=>c.company_full_name).filter(Boolean).sort();
-      h+=`<select data-key="${f.k}"><option value="">-- SELECT Company --</option>`;
-      companies.forEach(c=>{h+=`<option value="${c}"${val===c?' selected':''}>${c}</option>`});
-      h+=`<option value="__other">+ Enter manually</option></select>`;
-      h+=`<input type="text" data-key="${f.k}_manual" placeholder="Enter new name..." style="display:none;margin-top:4px">`;
-      h+=`</div>`;return}
+  const companies=(data.companies||[])
+    .map(c=>c.company_full_name)
+    .filter(Boolean)
+    .sort();
+
+  h+=`
+    <input
+      type="text"
+      data-key="${f.k}"
+      list="company-list"
+      value="${val}"
+      placeholder="SEARCH COMPANY OR ENTER MANUALLY..."
+      autocomplete="off"
+    >
+
+    <datalist id="company-list">
+      ${companies.map(c=>`
+        <option value="${escapeHtml(c)}">
+      `).join('')}
+    </datalist>
+  `;
+
+  h+=`</div>`;
+  return;
+}
     if(f.type==='select'){
       h+=`<select data-key="${f.k}"><option value="">-- SELECT --</option>`;
       (f.opts||[]).forEach(o=>{h+=`<option value="${o}"${val===o?' selected':''}>${o}</option>`});
@@ -890,10 +909,10 @@ function openForm(idx){
 
   $('formFields').innerHTML=h;
     // Show manual input when "Enter manually" selected
-  $('formFields').querySelectorAll('select[data-key="company_name"]').forEach(sel=>{
-    sel.addEventListener('change',()=>{
-      const manual=sel.parentElement.querySelector('[data-key="company_name_manual"]');
-      if(manual)manual.style.display=sel.value==='__other'?'':'none'})});
+$('formFields').querySelectorAll('select[data-key="company_name"]').forEach(sel=>{
+  sel.addEventListener('change',()=>{
+    const manual=sel.parentElement.querySelector('[data-key="company_name_manual"]');
+    if(manual)manual.style.display=sel.value==='__other'?'':'none'})});
   $('modalBg').classList.add('show');formSnapshot=getFormSnapshot();}
 
 function closeForm(){$('modalBg').classList.remove('show');editIdx=-1;formSnapshot='';}
