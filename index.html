@@ -915,7 +915,7 @@ async function saveForm(){
   data[eid]=nextArr;saveLocal();closeForm();renderAll();$('syncBadge').textContent='🟢 Saved';$('syncBadge').style.color='var(--grn)';toast(wasEdit?'✓ Updated + archived':'✓ Added + archived');return true}
 
 async function deleteRecord(){
-  if(!confirm('Delete this record from the dashboard? History will remain in Supabase.'))return false;
+  if(!confirm('Delete this record from the dashboard? History will still remain.'))return false;
   const eid=curEntity;if(editIdx<0||!data[eid])return false;if(!_cloudOK||!_pullDone){toast('⚠ Supabase is not ready. Nothing was deleted.');return false}
   if(!_historyOK&&!(await checkHistoryReady())){toast('⚠ History archive is not ready. Nothing was deleted. Run the Record History SQL first.');$('syncBadge').textContent='🟠 History not ready';$('syncBadge').style.color='var(--org)';return false}
   const nextArr=(data[eid]||[]).filter((_,i)=>i!==editIdx);$('syncBadge').textContent='🔄 Saving...';$('syncBadge').style.color='var(--blu)';
