@@ -586,17 +586,28 @@ function renderList(){
 // ═══ TEXT FILTER: SOFT... ═══
 function setFilter(el){
   const eid=curEntity;
+  const fk=el.dataset.fk;
 
-  if(!colFilters[eid]){ colFilters[eid]={}; }
+  if(!colFilters[eid]){
+    colFilters[eid]={};
+  }
 
-  colFilters[eid][el.dataset.fk]=el.value;
+  colFilters[eid][fk]=el.value;
 
   renderList();
 
-  // Giữ focus sau khi render lại bảng
   setTimeout(()=>{
-    const inp=document.querySelector( `[data-fk="${el.dataset.fk}"]` );
-    if(inp){ inp.focus(); inp.selectionStart=inp.value.length; } },0); }
+    const inp=document.querySelector(
+      `.filter-input[data-fk="${fk}"]`
+    );
+
+    if(inp){
+      inp.focus();
+      const len=inp.value.length;
+      inp.setSelectionRange(len,len);
+    }
+  },0);
+}
 
 // ═══ EXCEL-STYLE COLUMN FILTER ═══
 const colFilterChecks={};
