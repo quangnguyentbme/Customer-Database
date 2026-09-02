@@ -874,7 +874,7 @@ function openForm(idx){
     const cls=f.type==='textarea'?'full':'';
     h+=`<div class="form-group ${cls}"><label>${f.l}${f.required?' *':''}</label>`;
     if(f.k==='company_name'&&f.type==='text'){
-      const companies=(data.companies||[]).map(c=>c.company_name).filter(Boolean).sort();
+      const companies=(data.companies||[]).map(c=>c.company_full_name).filter(Boolean).sort();
       h+=`<select data-key="${f.k}"><option value="">-- SELECT Company --</option>`;
       companies.forEach(c=>{h+=`<option value="${c}"${val===c?' selected':''}>${c}</option>`});
       h+=`<option value="__other">+ Enter manually</option></select>`;
